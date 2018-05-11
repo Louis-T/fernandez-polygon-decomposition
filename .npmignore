@@ -1,0 +1,14 @@
+demo
+
+.babelrc
+.eslintignore
+.eslintrc.js
+rollup.config.js
+
+.travis.yml
+
+test
+coverage
+
+.idea
+.editorconfig
