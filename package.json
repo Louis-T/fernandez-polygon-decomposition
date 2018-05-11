@@ -59,9 +59,9 @@
     "build:commonjs": "cross-env NODE_ENV=cjs rollup -c -o lib/index.js",
     "build:es": "cross-env BABEL_ENV=es NODE_ENV=es babel src --out-dir es",
     "build": "yarn build:umd && yarn build:umd:min && yarn build:commonjs && yarn build:es",
-    "release:patch": "yarn lint && yarn test && yarn version --patch && git push --follow-tags",
-    "release:minor": "yarn lint && yarn test && yarn version --minor && git push --follow-tags",
-    "release:major": "yarn lint && yarn test && yarn version --major && git push --follow-tags"
+    "release:patch": "yarn lint && yarn test && yarn version --new-version patch && git push --follow-tags",
+    "release:minor": "yarn lint && yarn test && yarn version --new-version minor && git push --follow-tags",
+    "release:major": "yarn lint && yarn test && yarn version --new-version major && git push --follow-tags"
   },
   "jest": {
     "collectCoverage": true,
