@@ -1,0 +1,68 @@
+{
+  "name": "fernandez-polygon-decomposition",
+  "version": "1.0.0",
+  "description": "An algorithm to decompose polygons with holes from \"A practical algorithm for decomposing polygonal domains into convex polygons by diagonals\" by J Fernández",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
+  "author": "Louis Tribouillard (https://github.com/Louis-T)",
+  "license": "MIT",
+  "keywords": [
+    "javascript",
+    "convex",
+    "polygon",
+    "decomposition",
+    "holes",
+    "fernandez"
+  ],
+  "dependencies": {
+    "robust-point-in-polygon": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.1.5",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "gh-pages": "^1.1.0",
+    "jest": "^22.4.3",
+    "regenerator-runtime": "^0.11.1",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^3.0.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint:fix": "eslint --fix ./src",
+    "build:gh-pages": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -o demo/index.js",
+    "publish:gh-pages": "yarn build:gh-pages && gh-pages -d demo",
+    "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -o dist/index.js",
+    "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -o dist/index.min.js",
+    "build:commonjs": "cross-env NODE_ENV=cjs rollup -c -o lib/index.js",
+    "build:es": "cross-env BABEL_ENV=es NODE_ENV=es babel src --out-dir es",
+    "build": "yarn build:umd && yarn build:umd:min && yarn build:commonjs && yarn build:es"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js"
+    ],
+    "coverageDirectory": "coverage"
+  }
+}
