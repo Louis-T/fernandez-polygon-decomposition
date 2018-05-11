@@ -5,9 +5,20 @@ node_js:
 cache:
   yarn: true
 
+install:
+  - yarn
+
+script:
+  - yarn lint || travis_terminate 1
+  - yarn test || travis_terminate 1
+
+before_deploy:
+  - yarn build
+
 deploy:
   provider: npm
   email: $NPM_EMAIL
   api_key: $NPM_TOKEN
+  skip_cleanup: true
   on:
     tags: true

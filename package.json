@@ -43,6 +43,7 @@
   },
   "scripts": {
     "test": "jest",
+    "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "build:gh-pages": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -o demo/index.js",
     "publish:gh-pages": "yarn build:gh-pages && gh-pages -d demo",
