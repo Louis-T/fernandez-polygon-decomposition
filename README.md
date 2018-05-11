@@ -7,3 +7,25 @@ It implements some of the algorithms presented in two publications by [J Fernán
 * _A practical algorithm for decomposing polygonal domains into convex polygons by diagonals_
 
 [![Build Status](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition.svg?branch=master)](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition)
+
+## Installation
+
+```
+npm install fernandez-polygon-decomposition
+```
+
+## Usage
+
+```javascript
+const decompose = require('fernandez-polygon-decomposition').default
+
+const polygon = [
+    { x: 0, y: 0 }, 
+    { x: 100, y: 0 }, 
+    { x: 10, y: 20 }, 
+    { x: 0, y: 100 }
+];
+
+const convexPartition = decompose(polygon);
+console.log(convexPartition);
+```
