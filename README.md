@@ -8,6 +8,7 @@ It implements some of the algorithms presented in two publications by [J Fernán
 
 ---
 
+[![npm version](https://badge.fury.io/js/fernandez-polygon-decomposition.svg)](https://www.npmjs.com/package/fernandez-polygon-decomposition)
 [![Build Status](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition.svg?branch=master)](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition)
 
 ## Installation

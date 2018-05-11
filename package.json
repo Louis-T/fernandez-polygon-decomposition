@@ -15,6 +15,13 @@
     "holes",
     "fernandez"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Louis-T/fernandez-polygon-decomposition.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Louis-T/fernandez-polygon-decomposition/issues"
+  },
   "dependencies": {
     "robust-point-in-polygon": "^1.0.3"
   },
