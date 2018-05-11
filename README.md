@@ -6,6 +6,8 @@ It implements some of the algorithms presented in two publications by [J Fernán
 * _Algorithms for the decomposition of a polygon into convex polygons_
 * _A practical algorithm for decomposing polygonal domains into convex polygons by diagonals_
 
+---
+
 [![Build Status](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition.svg?branch=master)](https://travis-ci.org/Louis-T/fernandez-polygon-decomposition)
 
 ## Installation
