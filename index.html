@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>fernandez-polygon-decomposition</title>
+	    <style>
+	        html, body {
+	            margin: 0;
+	            padding: 0;
+	            width: 100%;
+	            height: 100%;
+	            box-sizing: border-box;
+	        }
+
+	        body {
+	        	display: flex;
+	        	flex-direction: column;
+	        }
+
+	        #canvas {
+	        	width: 100%;
+	            height: 100%;
+	            box-sizing: border-box;
+	       }
+
+	       #menu {
+		       	display: flex;
+		        flex-direction: row;
+	       }
+
+		   #menu > div {
+			   padding: 10px;
+		   }
+	    </style>
+	</head>
+	<body>
+		<div id="menu">
+			<div>
+				Contour :
+				<select id="contours"></select>
+			</div>
+			<div>
+				Holes :
+				<select id="holes"></select>
+			</div>
+		</div>
+		<canvas id="canvas">
+			Please use a recent browser...
+		</canvas>
+		<script src="./index.js"></script>
+		<script>
+			const transparentBgImage = new Image();
+			transparentBgImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAAAAACo4kLRAAAAF0lEQVR4AWP4CQf/4WBoCyKYCOkhLQgAFBGJ0NmZHwYAAAAASUVORK5CYII=';
+			
+			const contourList = [
+				[
+					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
+					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
+				],
+				[
+					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.5*window.innerWidth, y: 0.3*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
+					{ x: 0.5*window.innerWidth, y: 0.7*window.innerHeight },
+					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
+				],
+				[
+					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.3*window.innerWidth, y: 0.2*window.innerHeight },
+					{ x: 0.5*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.7*window.innerWidth, y: 0.2*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
+					{ x: 0.8*window.innerWidth, y: 0.3*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.5*window.innerHeight },
+					{ x: 0.8*window.innerWidth, y: 0.7*window.innerHeight },
+					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
+					{ x: 0.7*window.innerWidth, y: 0.8*window.innerHeight },
+					{ x: 0.5*window.innerWidth, y: 0.9*window.innerHeight },
+					{ x: 0.3*window.innerWidth, y: 0.8*window.innerHeight },
+					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
+					{ x: 0.2*window.innerWidth, y: 0.7*window.innerHeight },
+					{ x: 0.1*window.innerWidth, y: 0.5*window.innerHeight },
+					{ x: 0.2*window.innerWidth, y: 0.3*window.innerHeight },
+				],
+			];
+
+			const holesList = [
+				[],
+				[
+					[
+						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.6*window.innerHeight },
+					],
+				],
+				[
+					[
+						{ x: 0.5*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.5*window.innerHeight },
+						{ x: 0.5*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.5*window.innerHeight },
+					],
+				],
+				[
+					[
+						{ x: 0.3*window.innerWidth, y: 0.3*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.3*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.3*window.innerWidth, y: 0.4*window.innerHeight },
+					],
+					[
+						{ x: 0.6*window.innerWidth, y: 0.3*window.innerHeight },
+						{ x: 0.7*window.innerWidth, y: 0.3*window.innerHeight },
+						{ x: 0.7*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
+					],
+					[
+						{ x: 0.6*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.7*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.7*window.innerWidth, y: 0.7*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.7*window.innerHeight },
+					],
+					[
+						{ x: 0.3*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.4*window.innerWidth, y: 0.7*window.innerHeight },
+						{ x: 0.3*window.innerWidth, y: 0.7*window.innerHeight },
+					],
+				],
+				[
+					[
+						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.45*window.innerWidth, y: 0.5*window.innerHeight },
+						{ x: 0.55*window.innerWidth, y: 0.5*window.innerHeight },
+						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
+						{ x: 0.55*window.innerWidth, y: 0.6*window.innerHeight },
+						{ x: 0.5*window.innerWidth, y: 0.55*window.innerHeight },
+						{ x: 0.45*window.innerWidth, y: 0.6*window.innerHeight },
+					],
+				],
+			];
+
+			const colors = [
+				'rgba(230, 25, 75, 0.33)',
+				'rgba(60, 180, 75, 0.33)',
+				'rgba(255, 225, 25, 0.33)',
+				'rgba(0, 130, 200, 0.33)',
+				'rgba(245, 130, 48, 0.33)',
+				'rgba(145, 30, 180, 0.33)',
+				'rgba(70, 240, 240, 0.33)',
+				'rgba(240, 50, 230, 0.33)',
+				'rgba(210, 245, 60, 0.33)',
+				'rgba(250, 190, 190, 0.33)',
+				'rgba(0, 128, 128, 0.33)',
+				'rgba(230, 190, 255, 0.33)',
+				'rgba(170, 110, 40, 0.33)',
+				'rgba(128, 0, 0, 0.33)',
+				'rgba(170, 255, 195, 0.33)',
+				'rgba(128, 128, 0, 0.33)',
+				'rgba(255, 215, 180, 0.33)',
+				'rgba(0, 0, 128, 0.33)',
+			];
+
+			function load(context, contoursIndex, holesIndex) {
+				const contour = contourList[contoursIndex];
+				const holes = holesList[holesIndex];
+
+				drawPolygon(context, contour);
+				for(let hole of holes) {
+					drawPolygon(context, hole, 'rgba(0, 0, 0, 0.33)', context.createPattern(transparentBgImage, "repeat"));
+				}
+				console.time("absHol");
+				const partition = fernandezPolygonDecomposition.absHol(contour, holes);
+				console.timeEnd("absHol");
+				for(let polygonIndex in partition) {
+					drawPolygon(context, partition[polygonIndex], 'rgba(0, 0, 0, 0.33)', colors[polygonIndex % colors.length]);
+				}
+			}
+
+			function drawPolygon(context, polygon, strokeStyle = 'black', fillStyle = 'transparent') {
+				context.fillStyle = fillStyle;
+                context.strokeStyle = strokeStyle;
+				context.beginPath();
+				context.moveTo(polygon[0].x, polygon[0].y);
+                for(let i = 1; i < polygon.length; i++){
+                    context.lineTo(polygon[i].x, polygon[i].y);
+                }
+                context.closePath();
+                context.stroke();
+                context.fill();
+			}
+
+			window.addEventListener('load', function() {
+				const contoursSelect = document.getElementById("contours");
+				for (let i = 0; i < contourList.length; i++) {
+					contoursSelect[i] = new Option(i+1, i);
+				}
+
+				const holesSelect = document.getElementById("holes");
+				for (let i = 0; i < holesList.length; i++) {
+					holesSelect[i] = new Option(i+1, i);
+				}
+
+				const canvas = document.getElementById("canvas");
+				canvas.style.width = '100%';
+	            canvas.style.height = '100%';
+	            canvas.width = canvas.offsetWidth;
+	            canvas.height = canvas.offsetHeight;
+
+				const ctx = canvas.getContext('2d');
+
+				contoursSelect.addEventListener('change', function(e) {
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					load(ctx, contoursSelect.value, holesSelect.value);
+				});
+
+				holesSelect.addEventListener('change', function(e) {
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					load(ctx, contoursSelect.value, holesSelect.value);
+				});
+            });
+
+			
+		</script>
+	</body>
+</html>
