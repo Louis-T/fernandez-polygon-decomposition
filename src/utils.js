@@ -57,14 +57,16 @@ export function isClockwiseOrdered (polygon) {
 }
 
 /**
+ * This method always returns a new array
+ *
  * @param {{ x: number, y: number}[]} polygon
  * @returns {{ x: number, y: number}[]}
  */
 export function orderClockwise (polygon) {
   if (!isClockwiseOrdered(polygon)) {
-    return polygon.reverse();
+    return [...polygon].reverse();
   }
-  return polygon;
+  return [...polygon];
 }
 
 /**
