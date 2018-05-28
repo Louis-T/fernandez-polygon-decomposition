@@ -842,14 +842,16 @@ return d[d.length-1];};return ", funcName].join("");
 	}
 
 	/**
+	 * This method always returns a new array
+	 *
 	 * @param {{ x: number, y: number}[]} polygon
 	 * @returns {{ x: number, y: number}[]}
 	 */
 	function orderClockwise(polygon) {
 	  if (!isClockwiseOrdered(polygon)) {
-	    return polygon.reverse();
+	    return [].concat(toConsumableArray(polygon)).reverse();
 	  }
-	  return polygon;
+	  return [].concat(toConsumableArray(polygon));
 	}
 
 	/**
@@ -2066,6 +2068,7 @@ return d[d.length-1];};return ", funcName].join("");
 	exports.isSimple = isSimple;
 	exports.orderClockwise = orderClockwise;
 	exports.isConvex = isConvex;
+	exports.isClockwiseOrdered = isClockwiseOrdered;
 	exports.default = absHol;
 
 	Object.defineProperty(exports, '__esModule', { value: true });

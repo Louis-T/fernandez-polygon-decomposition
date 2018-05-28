@@ -44,104 +44,23 @@
 			</div>
 		</div>
 		<canvas id="canvas">
-			Please use a recent browser...
+			<a href="https://caniuse.com/#feat=canvas">This browser does not support canvas.</a>
 		</canvas>
 		<script src="./index.js"></script>
-		<script>
+		<script nomodule="">
+			var canvasEl = document.getElementById('canvas');
+			canvasEl && canvasEl.parentNode && canvasEl.parentNode.removeChild(canvasEl);
+
+			var aEl = document.createElement('a');
+			aEl.appendChild(document.createTextNode('This browser does not support modules.'));
+			aEl.setAttribute('href', 'https://caniuse.com/#feat=es6-module');
+			document.body.appendChild(aEl);
+		</script>
+		<script type="module">
 			const transparentBgImage = new Image();
 			transparentBgImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAAAAACo4kLRAAAAF0lEQVR4AWP4CQf/4WBoCyKYCOkhLQgAFBGJ0NmZHwYAAAAASUVORK5CYII=';
 			
-			const contourList = [
-				[
-					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
-					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
-				],
-				[
-					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.5*window.innerWidth, y: 0.3*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
-					{ x: 0.5*window.innerWidth, y: 0.7*window.innerHeight },
-					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
-				],
-				[
-					{ x: 0.1*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.3*window.innerWidth, y: 0.2*window.innerHeight },
-					{ x: 0.5*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.7*window.innerWidth, y: 0.2*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.1*window.innerHeight },
-					{ x: 0.8*window.innerWidth, y: 0.3*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.5*window.innerHeight },
-					{ x: 0.8*window.innerWidth, y: 0.7*window.innerHeight },
-					{ x: 0.9*window.innerWidth, y: 0.9*window.innerHeight },
-					{ x: 0.7*window.innerWidth, y: 0.8*window.innerHeight },
-					{ x: 0.5*window.innerWidth, y: 0.9*window.innerHeight },
-					{ x: 0.3*window.innerWidth, y: 0.8*window.innerHeight },
-					{ x: 0.1*window.innerWidth, y: 0.9*window.innerHeight },
-					{ x: 0.2*window.innerWidth, y: 0.7*window.innerHeight },
-					{ x: 0.1*window.innerWidth, y: 0.5*window.innerHeight },
-					{ x: 0.2*window.innerWidth, y: 0.3*window.innerHeight },
-				],
-			];
-
-			const holesList = [
-				[],
-				[
-					[
-						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.6*window.innerHeight },
-					],
-				],
-				[
-					[
-						{ x: 0.5*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.5*window.innerHeight },
-						{ x: 0.5*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.5*window.innerHeight },
-					],
-				],
-				[
-					[
-						{ x: 0.3*window.innerWidth, y: 0.3*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.3*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.3*window.innerWidth, y: 0.4*window.innerHeight },
-					],
-					[
-						{ x: 0.6*window.innerWidth, y: 0.3*window.innerHeight },
-						{ x: 0.7*window.innerWidth, y: 0.3*window.innerHeight },
-						{ x: 0.7*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
-					],
-					[
-						{ x: 0.6*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.7*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.7*window.innerWidth, y: 0.7*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.7*window.innerHeight },
-					],
-					[
-						{ x: 0.3*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.4*window.innerWidth, y: 0.7*window.innerHeight },
-						{ x: 0.3*window.innerWidth, y: 0.7*window.innerHeight },
-					],
-				],
-				[
-					[
-						{ x: 0.4*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.45*window.innerWidth, y: 0.5*window.innerHeight },
-						{ x: 0.55*window.innerWidth, y: 0.5*window.innerHeight },
-						{ x: 0.6*window.innerWidth, y: 0.4*window.innerHeight },
-						{ x: 0.55*window.innerWidth, y: 0.6*window.innerHeight },
-						{ x: 0.5*window.innerWidth, y: 0.55*window.innerHeight },
-						{ x: 0.45*window.innerWidth, y: 0.6*window.innerHeight },
-					],
-				],
-			];
+			import { contourList, holesList } from './examples.js';
 
 			const colors = [
 				'rgba(230, 25, 75, 0.33)',
