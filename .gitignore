@@ -6,3 +6,4 @@ es
 lib
 demo/*
 !demo/index.html
+!demo/examples.js
