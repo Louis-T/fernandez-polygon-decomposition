@@ -417,9 +417,9 @@ export function isSimple (polygon) {
  */
 export function isFlat (polygon) {
   const polygonLength = polygon.length;
-  return polygon.reduce((sum, { x, y }, index) => {
+  return Math.abs(polygon.reduce((sum, { x, y }, index) => {
     const { x: nextX, y: nextY } = polygon[(index + 1) % polygonLength];
     sum += x * nextY - y * nextX;
     return sum;
-  }, 0) === 0;
+  }, 0)) < 0.000001;
 }

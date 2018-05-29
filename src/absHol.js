@@ -33,7 +33,7 @@ const segmentIntersectsPolygon = (segment, polygon) => {
       console.log('end of segment on a vertex');
       return true;
     } else if (ua >= 0 && ub >= 0 && ua <= 1 && ub <= 1) {
-      console.error('whaaaat ?');
+      console.error('whaaaat ?', ua, ub);
     }
   }
   return false;
@@ -94,16 +94,20 @@ const drawTrueDiagonal = (diagonal, C, holesInC) => {
     edges.push(...getSegmentHoleIntersectionEdges(diagonal, holesInC[i]));
   }
 
+  let previousClosestVertexId = diagonal.b.id;
   while (edges.length > 0) {
-    const closestEdge = edges.sort(comparator)[0];
+    const closestEdge = edges.sort(comparator).find(({ edge }) => {
+      return inPolygon(edge.a, C) || inPolygon(edge.b, C);
+    });
     const closestVertex = Object.values(closestEdge.edge).filter(v => inPolygon(v, C)).sort(comparator)[0];
-    // is it possible that we have to take another edge ??
-    if (closestVertex === undefined) {
-      throw new Error('ERROR drawTrueDiagonal');
+
+    if (closestVertex.id === previousClosestVertexId) {
+      return diagonal;
     }
 
     diagonal = { a: diagonal.a, b: closestVertex, hole: closestEdge.hole };
 
+    previousClosestVertexId = closestVertex.id;
     edges = [];
     for (let i = 0; i < holesInCLength; i++) {
       edges.push(...getSegmentHoleIntersectionEdges(diagonal, holesInC[i]));

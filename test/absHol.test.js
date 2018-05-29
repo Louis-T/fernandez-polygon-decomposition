@@ -296,86 +296,6 @@ describe('absHol algorithm', () => {
     expect(partition).toBeAConvexPartition();
   });
 
-  test('Polygon with holes n°9', () => {
-    const contour = [
-        { x: 0, y: 0},
-        { x: 200, y: 0},
-        { x: 200, y: 200},
-        { x: 0, y: 200},
-    ];
-    const holes = [
-        [
-            { x: 0, y: 50},
-            { x: 50, y: 50},
-            { x: 50, y: 150},
-            { x: 0, y: 150},
-        ]
-    ];
-
-    const partition = absHol(contour, holes);
-    expect(partition).toBeAConvexPartition();
-  });
-
-  test('Polygon with holes n°10', () => {
-    const contour = [
-        { x: 0, y: 0},
-        { x: 200, y: 0},
-        { x: 200, y: 200},
-        { x: 0, y: 200},
-    ];
-    const holes = [
-        [
-            { x: 0, y: 0},
-            { x: 50, y: 0},
-            { x: 50, y: 50},
-            { x: 0, y: 50},
-        ]
-    ];
-
-    const partition = absHol(contour, holes);
-    expect(partition).toBeAConvexPartition();
-  });
-
-  test('Polygon with holes n°11', () => {
-    const contour = [
-        { x: 0, y: 0},
-        { x: 200, y: 0},
-        { x: 200, y: 200},
-        { x: 0, y: 200},
-    ];
-    const holes = [
-        [
-            { x: 50, y: 150},
-            { x: 150, y: 150},
-            { x: 150, y: 200},
-            { x: 50, y: 200},
-        ]
-    ];
-
-    const partition = absHol(contour, holes);
-    expect(partition).toBeAConvexPartition();
-  });
-
-  test('Polygon with holes n°12', () => {
-    const contour = [
-        { x: 0, y: 0},
-        { x: 200, y: 0},
-        { x: 200, y: 200},
-        { x: 0, y: 200},
-    ];
-    const holes = [
-        [
-            { x: 150, y: 150},
-            { x: 200, y: 150},
-            { x: 200, y: 200},
-            { x: 150, y: 200},
-        ]
-    ];
-
-    const partition = absHol(contour, holes);
-    expect(partition).toBeAConvexPartition();
-  });
-
   test('Polygon with holes n°13 (floating point error in getSegmentHoleIntersectionEdges)', () => {
     const contour = [
         { x: 156.5, y: 97.4 },
@@ -397,4 +317,197 @@ describe('absHol algorithm', () => {
     const partition = absHol(contour, holes);
     expect(partition).toBeAConvexPartition();
   });
+
+  test('Polygon with holes n°14', () => {
+    const contour = [
+        { x: 131.9, y: 84.60000000000001 },
+        { x: 1187.1000000000001, y: 84.60000000000001 },
+        { x: 1187.1000000000001, y: 761.4 },
+        { x: 131.9, y: 761.4 },
+    ];
+    const holes = [
+        [
+          { x: 395.7, y: 253.79999999999998 },
+          { x: 527.6, y: 253.79999999999998 },
+          { x: 527.6, y: 338.40000000000003 },
+          { x: 395.7, y: 338.40000000000003 },
+        ],
+        [
+          { x: 791.4, y: 253.79999999999998 },
+          { x: 923.3, y: 253.79999999999998 },
+          { x: 923.3, y: 338.40000000000003 },
+          { x: 791.4, y: 338.40000000000003 },
+        ],
+        [
+          { x: 791.4, y: 507.59999999999997 },
+          { x: 923.3, y: 507.59999999999997 },
+          { x: 923.3, y: 592.1999999999999 },
+          { x: 791.4, y: 592.1999999999999 },
+        ],
+        [
+          { x: 395.7, y: 507.59999999999997 },
+          { x: 527.6, y: 507.59999999999997 },
+          { x: 527.6, y: 592.1999999999999 },
+          { x: 395.7, y: 592.1999999999999 },
+        ]
+      ];
+
+    const partition = absHol(contour, holes);
+    expect(partition).toBeAConvexPartition();
+  });
+
+  test('Polygon with holes n°15', () => {
+    const contour = [
+        { x: 131.9, y: 84.60000000000001 },
+        { x: 1187.1000000000001, y: 84.60000000000001 },
+        { x: 1187.1000000000001, y: 761.4 },
+        { x: 131.9, y: 761.4 },
+      ];
+    const holes = [
+        [
+          { x: 527.6, y: 338.40000000000003 },
+          { x: 593.5500000000001, y: 423 },
+          { x: 725.45, y: 423 },
+          { x: 791.4, y: 338.40000000000003 },
+          { x: 725.45, y: 507.59999999999997 },
+          { x: 659.5, y: 465.3 },
+          { x: 593.5500000000001, y: 507.59999999999997 },
+        ]
+      ];
+
+    const partition = absHol(contour, holes);
+    expect(partition).toBeAConvexPartition();
+  });
+
+  let n = 0;
+  for (let i = 0; i <= 150; i += 75) {
+    for (let j = 0; j <= 150; j += 75) {
+      if (i === j && i === 75) {
+          continue;
+      }
+
+      test(`Holes on contour n°${++n} (one hole on the contour)`, () => {
+        const contour = [
+            { x: 0, y: 0},
+            { x: 200, y: 0},
+            { x: 200, y: 200},
+            { x: 0, y: 200},
+        ];
+        const holes = [
+            [
+                { x: 0 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 50 + j * 75 },
+                { x: 0 + i * 75, y: 50 + j * 75 },
+            ]
+        ];
+      });
+
+      test(`Holes on contour n°${++n} (one hole on the contour, one hole at the center`, () => {
+        const contour = [
+            { x: 0, y: 0},
+            { x: 200, y: 0},
+            { x: 200, y: 200},
+            { x: 0, y: 200},
+        ];
+        const holes = [
+            [
+                { x: 0 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 50 + j * 75 },
+                { x: 0 + i * 75, y: 50 + j * 75 },
+            ],
+            [
+                { x: 90, y: 90 },
+                { x: 110, y: 90 },
+                { x: 110, y: 110 },
+                { x: 90, y: 110 },
+            ],
+        ];
+      });
+
+      test(`Holes on contour n°${++n} (two holes on the contour)`, () => {
+        const contour = [
+            { x: 0, y: 0},
+            { x: 200, y: 0},
+            { x: 200, y: 200},
+            { x: 0, y: 200},
+        ];
+        const holes = [
+            [
+                { x: 0 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 50 + j * 75 },
+                { x: 0 + i * 75, y: 50 + j * 75 },
+            ],
+            [
+                { x: 150 - i * 75, y: 150 - j * 75 },
+                { x: 200 - i * 75, y: 150 - j * 75 },
+                { x: 200 - i * 75, y: 200 - j * 75 },
+                { x: 150 - i * 75, y: 200 - j * 75 },
+            ],
+        ];
+      });
+
+      test(`Holes on contour n°${++n} (two holes on the contour, one hole at the center)`, () => {
+        const contour = [
+            { x: 0, y: 0},
+            { x: 200, y: 0},
+            { x: 200, y: 200},
+            { x: 0, y: 200},
+        ];
+        const holes = [
+            [
+                { x: 0 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 0 + j * 75 },
+                { x: 50 + i * 75, y: 50 + j * 75 },
+                { x: 0 + i * 75, y: 50 + j * 75 },
+            ],
+            [
+                { x: 150 - i * 75, y: 150 - j * 75 },
+                { x: 200 - i * 75, y: 150 - j * 75 },
+                { x: 200 - i * 75, y: 200 - j * 75 },
+                { x: 150 - i * 75, y: 200 - j * 75 },
+            ],
+            [
+                { x: 90, y: 90 },
+                { x: 110, y: 90 },
+                { x: 110, y: 110 },
+                { x: 90, y: 110 },
+            ],
+        ];
+      });
+    }
+  }
+
+
+
+
+  /*function generateRandomStarShapedPolygon(n, x = 0, y = 0, maxRadius = 10) {
+    const vertices = [];
+    for (let i = 0; i < n; i++) {
+        const angle = i * 2 * Math.PI / n;
+        const radius = Math.random() * maxRadius;
+        vertices.push({
+            x: x + radius * Math.cos(angle),
+            y: y + radius * Math.sin(angle),
+        });
+    }
+    return vertices;
+}
+  for (let i = 0; i < 200; i++) {
+    test(`RND`, () => {
+        const contour = [
+            { x: 0, y: 0},
+            { x: 200, y: 0},
+            { x: 200, y: 200},
+            { x: 0, y: 200},
+        ];
+        const holes = [
+            generateRandomStarShapedPolygon(10, 50, 50, 25),
+            generateRandomStarShapedPolygon(8, 125, 125, 10),
+            generateRandomStarShapedPolygon(7, 125, 36, 15),
+        ];
+      });
+  }*/
 });

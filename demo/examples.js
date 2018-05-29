@@ -1,91 +1,115 @@
-export const contourList = [
-  [
-    { x: 0.1 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.9 * window.innerHeight },
-    { x: 0.1 * window.innerWidth, y: 0.9 * window.innerHeight },
-  ],
-  [
-    { x: 0.1 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.5 * window.innerWidth, y: 0.3 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.9 * window.innerHeight },
-    { x: 0.5 * window.innerWidth, y: 0.7 * window.innerHeight },
-    { x: 0.1 * window.innerWidth, y: 0.9 * window.innerHeight },
-  ],
-  [
-    { x: 0.1 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.3 * window.innerWidth, y: 0.2 * window.innerHeight },
-    { x: 0.5 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.7 * window.innerWidth, y: 0.2 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.1 * window.innerHeight },
-    { x: 0.8 * window.innerWidth, y: 0.3 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.5 * window.innerHeight },
-    { x: 0.8 * window.innerWidth, y: 0.7 * window.innerHeight },
-    { x: 0.9 * window.innerWidth, y: 0.9 * window.innerHeight },
-    { x: 0.7 * window.innerWidth, y: 0.8 * window.innerHeight },
-    { x: 0.5 * window.innerWidth, y: 0.9 * window.innerHeight },
-    { x: 0.3 * window.innerWidth, y: 0.8 * window.innerHeight },
-    { x: 0.1 * window.innerWidth, y: 0.9 * window.innerHeight },
-    { x: 0.2 * window.innerWidth, y: 0.7 * window.innerHeight },
-    { x: 0.1 * window.innerWidth, y: 0.5 * window.innerHeight },
-    { x: 0.2 * window.innerWidth, y: 0.3 * window.innerHeight },
-  ],
-];
+export const generateContourList = (maxWidth, maxHeight) => {
+  return [
+    [
+      { x: 0.1 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.1 * maxWidth, y: 0.9 * maxHeight },
+    ],
+    [
+      { x: 0.1 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.5 * maxWidth, y: 0.3 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.5 * maxWidth, y: 0.7 * maxHeight },
+      { x: 0.1 * maxWidth, y: 0.9 * maxHeight },
+    ],
+    [
+      { x: 0.1 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.3 * maxWidth, y: 0.2 * maxHeight },
+      { x: 0.5 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.2 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.8 * maxWidth, y: 0.3 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.5 * maxHeight },
+      { x: 0.8 * maxWidth, y: 0.7 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.8 * maxHeight },
+      { x: 0.5 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.3 * maxWidth, y: 0.8 * maxHeight },
+      { x: 0.1 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.2 * maxWidth, y: 0.7 * maxHeight },
+      { x: 0.1 * maxWidth, y: 0.5 * maxHeight },
+      { x: 0.2 * maxWidth, y: 0.3 * maxHeight },
+    ],
+    [
+      { x: 0.3 * maxWidth, y: 0.3 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.3 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.7 * maxHeight },
+      { x: 0.3 * maxWidth, y: 0.7 * maxHeight },
+    ],
+  ];
+};
 
-export const holesList = [
-  [],
-  [
+export const generateHolesList = (maxWidth, maxHeight) => {
+  return [
+    [],
     [
-      { x: 0.4 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.6 * window.innerHeight },
-    ],
-  ],
-  [
-    [
-      { x: 0.5 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.5 * window.innerHeight },
-      { x: 0.5 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.5 * window.innerHeight },
-    ],
-  ],
-  [
-    [
-      { x: 0.3 * window.innerWidth, y: 0.3 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.3 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.3 * window.innerWidth, y: 0.4 * window.innerHeight },
+      [
+        { x: 0.4 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.6 * maxHeight },
+      ],
     ],
     [
-      { x: 0.6 * window.innerWidth, y: 0.3 * window.innerHeight },
-      { x: 0.7 * window.innerWidth, y: 0.3 * window.innerHeight },
-      { x: 0.7 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.4 * window.innerHeight },
+      [
+        { x: 0.5 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.5 * maxHeight },
+        { x: 0.5 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.5 * maxHeight },
+      ],
     ],
     [
-      { x: 0.6 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.7 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.7 * window.innerWidth, y: 0.7 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.7 * window.innerHeight },
+      [
+        { x: 0.3 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.3 * maxWidth, y: 0.4 * maxHeight },
+      ],
+      [
+        { x: 0.6 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.4 * maxHeight },
+      ],
+      [
+        { x: 0.6 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.7 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.7 * maxHeight },
+      ],
+      [
+        { x: 0.3 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.7 * maxHeight },
+        { x: 0.3 * maxWidth, y: 0.7 * maxHeight },
+      ],
     ],
     [
-      { x: 0.3 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.4 * window.innerWidth, y: 0.7 * window.innerHeight },
-      { x: 0.3 * window.innerWidth, y: 0.7 * window.innerHeight },
+      [
+        { x: 0.4 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.45 * maxWidth, y: 0.5 * maxHeight },
+        { x: 0.55 * maxWidth, y: 0.5 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.4 * maxHeight },
+        { x: 0.55 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.5 * maxWidth, y: 0.55 * maxHeight },
+        { x: 0.45 * maxWidth, y: 0.6 * maxHeight },
+      ],
     ],
-  ],
-  [
     [
-      { x: 0.4 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.45 * window.innerWidth, y: 0.5 * window.innerHeight },
-      { x: 0.55 * window.innerWidth, y: 0.5 * window.innerHeight },
-      { x: 0.6 * window.innerWidth, y: 0.4 * window.innerHeight },
-      { x: 0.55 * window.innerWidth, y: 0.6 * window.innerHeight },
-      { x: 0.5 * window.innerWidth, y: 0.55 * window.innerHeight },
-      { x: 0.45 * window.innerWidth, y: 0.6 * window.innerHeight },
-    ],
-  ],
-];
+      [
+        { x: 0.3 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.4 * maxWidth, y: 0.3 * maxHeight },
+        { x: 0.5 * maxWidth, y: 0.5 * maxHeight },
+        { x: 0.3 * maxWidth, y: 0.4 * maxHeight },
+      ],
+      [
+        { x: 0.5 * maxWidth, y: 0.5 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.6 * maxHeight },
+        { x: 0.7 * maxWidth, y: 0.7 * maxHeight },
+        { x: 0.6 * maxWidth, y: 0.7 * maxHeight },
+      ],
+    ]
+  ];
+};

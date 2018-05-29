@@ -22,6 +22,20 @@
 	            box-sizing: border-box;
 	       }
 
+		   header {
+			   padding-left: 10px;
+			   background: aliceblue;
+			   border-bottom: royalblue 1px solid;
+		   }
+
+		   #info {
+			   margin: 0 0 15px 15px;
+		   }
+
+		   #title {
+				margin: 0;
+		   }
+
 	       #menu {
 		       	display: flex;
 		        flex-direction: row;
@@ -33,19 +47,32 @@
 	    </style>
 	</head>
 	<body>
-		<div id="menu">
-			<div>
-				Contour :
-				<select id="contours"></select>
+		<header>
+			<h1 id="title">
+				<a href="https://github.com/Louis-T/fernandez-polygon-decomposition">fernandez-polygon-decomposition</a>
+			</h1>
+			<div id="info">
+				Library for decomposing polygons with (or without) holes into a partition of convex polygons.
 			</div>
 			<div>
-				Holes :
-				<select id="holes"></select>
+				Select a contour, and a set of holes, and check out the generated convex partitions.
 			</div>
-		</div>
+			<div id="menu">
+				<div>
+					Contour :
+					<select id="contours"></select>
+				</div>
+				<div>
+					Holes :
+					<select id="holes"></select>
+				</div>
+			</div>
+		</header>
+		
 		<canvas id="canvas">
 			<a href="https://caniuse.com/#feat=canvas">This browser does not support canvas.</a>
 		</canvas>
+
 		<script src="./index.js"></script>
 		<script nomodule="">
 			var canvasEl = document.getElementById('canvas');
@@ -57,10 +84,7 @@
 			document.body.appendChild(aEl);
 		</script>
 		<script type="module">
-			const transparentBgImage = new Image();
-			transparentBgImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAAAAACo4kLRAAAAF0lEQVR4AWP4CQf/4WBoCyKYCOkhLQgAFBGJ0NmZHwYAAAAASUVORK5CYII=';
-			
-			import { contourList, holesList } from './examples.js';
+			import { generateContourList, generateHolesList } from './examples.js';
 
 			const colors = [
 				'rgba(230, 25, 75, 0.33)',
@@ -83,6 +107,32 @@
 				'rgba(0, 0, 128, 0.33)',
 			];
 
+			const transparentBgImage = new Image();
+			transparentBgImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAAAAACo4kLRAAAAF0lEQVR4AWP4CQf/4WBoCyKYCOkhLQgAFBGJ0NmZHwYAAAAASUVORK5CYII=';
+			
+			const canvas = document.getElementById("canvas");
+			canvas.style.width = '100%';
+			canvas.style.height = '100%';
+			canvas.width = canvas.offsetWidth;
+			canvas.height = canvas.offsetHeight;
+			const ctx = canvas.getContext('2d');
+
+			const contourList = generateContourList(canvas.width, canvas.height);
+			const holesList = generateHolesList(canvas.width, canvas.height);
+
+			function drawPolygon(context, polygon, strokeStyle = 'black', fillStyle = 'transparent') {
+				context.fillStyle = fillStyle;
+                context.strokeStyle = strokeStyle;
+				context.beginPath();
+				context.moveTo(polygon[0].x, polygon[0].y);
+                for(let i = 1; i < polygon.length; i++){
+                    context.lineTo(polygon[i].x, polygon[i].y);
+                }
+                context.closePath();
+                context.stroke();
+                context.fill();
+			}
+
 			function load(context, contoursIndex, holesIndex) {
 				const contour = contourList[contoursIndex];
 				const holes = holesList[holesIndex];
@@ -99,50 +149,24 @@
 				}
 			}
 
-			function drawPolygon(context, polygon, strokeStyle = 'black', fillStyle = 'transparent') {
-				context.fillStyle = fillStyle;
-                context.strokeStyle = strokeStyle;
-				context.beginPath();
-				context.moveTo(polygon[0].x, polygon[0].y);
-                for(let i = 1; i < polygon.length; i++){
-                    context.lineTo(polygon[i].x, polygon[i].y);
-                }
-                context.closePath();
-                context.stroke();
-                context.fill();
+			const contoursSelect = document.getElementById("contours");
+			for (let i = 0; i < contourList.length; i++) {
+				contoursSelect[i] = new Option(i+1, i);
 			}
+			contoursSelect.addEventListener('change', function(e) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				load(ctx, contoursSelect.value, holesSelect.value);
+			});
 
-			window.addEventListener('load', function() {
-				const contoursSelect = document.getElementById("contours");
-				for (let i = 0; i < contourList.length; i++) {
-					contoursSelect[i] = new Option(i+1, i);
-				}
+			const holesSelect = document.getElementById("holes");
+			for (let i = 0; i < holesList.length; i++) {
+				holesSelect[i] = new Option(i+1, i);
+			}
+			holesSelect.addEventListener('change', function(e) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				load(ctx, contoursSelect.value, holesSelect.value);
+			});
 
-				const holesSelect = document.getElementById("holes");
-				for (let i = 0; i < holesList.length; i++) {
-					holesSelect[i] = new Option(i+1, i);
-				}
-
-				const canvas = document.getElementById("canvas");
-				canvas.style.width = '100%';
-	            canvas.style.height = '100%';
-	            canvas.width = canvas.offsetWidth;
-	            canvas.height = canvas.offsetHeight;
-
-				const ctx = canvas.getContext('2d');
-
-				contoursSelect.addEventListener('change', function(e) {
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					load(ctx, contoursSelect.value, holesSelect.value);
-				});
-
-				holesSelect.addEventListener('change', function(e) {
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					load(ctx, contoursSelect.value, holesSelect.value);
-				});
-            });
-
-			
 		</script>
 	</body>
 </html>

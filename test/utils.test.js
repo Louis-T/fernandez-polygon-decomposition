@@ -1,4 +1,4 @@
-import { turnDirection, sideOfLine, isSimple, isConvex, isClockwiseOrdered, polygonEquality } from '../src/utils';
+import { turnDirection, sideOfLine, isSimple, isConvex, isClockwiseOrdered, isFlat, polygonEquality } from '../src/utils';
 
 expect.extend({
     toHaveTheSameSignAs(received, argument) {
@@ -202,5 +202,90 @@ describe('isClockwiseOrdered', () => {
             { x: 100, y: 100 },
         ];
         expect(isClockwiseOrdered(polygon)).toBe(false);
+    });
+});
+
+describe('isFlat', () => {
+    test('simple square', () => {
+        const polygon = [
+            { x: 0, y: 0 },
+            { x: 100, y: 0 },
+            { x: 100, y: 100 },
+            { x: 0, y: 100 },
+        ];
+        expect(isFlat(polygon)).toBe(false);
+    });
+
+    test('simple square (centered on {0, 0})', () => {
+        const polygon = [
+            { x: -50, y: -50 },
+            { x: 50, y: -50 },
+            { x: 50, y: 50 },
+            { x: -50, y: 50 },
+        ];
+        expect(isFlat(polygon)).toBe(false);
+    });
+
+    test('simple square', () => {
+        const polygon = [
+            { x: 0.0000000001, y: 0.0000000001 },
+            { x: 100, y: 0.0000000001 },
+            { x: 100, y: 100 },
+            { x: 0.0000000001, y: 100 },
+        ];
+        expect(isFlat(polygon)).toBe(false);
+    });
+
+    test('flat square', () => {
+        const polygon = [
+            { x: 0, y: 0 },
+            { x: 0, y: 100 },
+            { x: 0, y: 100 },
+            { x: 0, y: 0 },
+        ];
+        expect(isFlat(polygon)).toBe(true);
+    });
+
+    test('flat shape n°1', () => {
+        const polygon = [
+            { x: 395.7, y: 507.59999999999997 },
+            { x: 395.7, y: 592.1999999999999 },
+            { x: 395.7, y: 592.1999999999999 },
+            { x: 395.7, y: 253.79999999999998 },
+            { x: 395.7, y: 338.40000000000003 },
+        ];
+        expect(isFlat(polygon)).toBe(true);
+    });
+
+    test('flat shape n°2', () => {
+        const polygon = [
+            { x: 395.7, y: 592.1999999999999 },
+            { x: 527.6, y: 592.1999999999999 },
+            { x: 791.4, y: 592.1999999999999 },
+            { x: 923.3, y: 592.1999999999999 },
+            { x: 923.3, y: 592.1999999999999 },
+            { x: 395.7, y: 592.1999999999999 },
+        ];
+        expect(isFlat(polygon)).toBe(true);
+    });
+
+    test('flat shape n°3', () => {
+        const polygon = [
+            { x: 791.4, y: 592.1999999999999 },
+            { x: 923.3, y: 592.1999999999999 },
+            { x: 923.3, y: 592.1999999999999 },
+            { x: 395.7, y: 592.1999999999999 },
+        ];
+        expect(isFlat(polygon)).toBe(true);
+    });
+
+    test('flat shape n°3', () => {
+        const polygon = [
+            { x: 7.914, y: 5.921999999999999 },
+            { x: 9.233, y: 5.921999999999999 },
+            { x: 9.233, y: 5.921999999999999 },
+            { x: 3.957, y: 5.921999999999999 },
+        ];
+        expect(isFlat(polygon)).toBe(true);
     });
 });
