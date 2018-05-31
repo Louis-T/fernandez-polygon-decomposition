@@ -1,4 +1,4 @@
-import { pointEquality, turnDirection, isConvex } from './utils.js';
+import { pointEquality, orientation, isConvex } from './utils.js';
 
 function rotateRight (arr, n) {
   const length = arr.length;
@@ -72,7 +72,7 @@ export function mergingAlgorithm (polygons, LLE) {
     const j1 = Pj[(Pj.findIndex(v => (v.originalId || v.id) === (j2.originalId || j2.id)) + PjLength - 1) % PjLength]; // previousVertex(j2, Pj)
     const j3 = Pu[(Pu.findIndex(v => (v.originalId || v.id) === (j2.originalId || j2.id)) + 1) % PuLength]; //  nextVertex(j2, Pu);
 
-    if (turnDirection(i1, i2, i3) >= 0 && turnDirection(j1, j2, j3) >= 0) {
+    if (orientation(i1, i2, i3) >= 0 && orientation(j1, j2, j3) >= 0) {
       const P = mergePolygons(Pj, Pu);
       if (!isConvex(P)) {
         throw new Error('mergePolygons is not convex !');

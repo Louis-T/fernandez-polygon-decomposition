@@ -1,4 +1,4 @@
-import { previousVertex, nextVertex, turnDirection, isAVertex, substractPolygons, sideOfLine, getNotches, inPolygon } from './utils.js';
+import { previousVertex, nextVertex, orientation, isAVertex, substractPolygons, sideOfLine, getNotches, inConvexPolygon } from './utils.js';
 
 // P is a polygon (vertices are clockwise ordered)
 /**
@@ -28,7 +28,7 @@ export function MP1 (P, initialLVertices) {
   let vi = v2;
   let vip1 = nextVertex(vi, P);
   while (L.length < P.length) {
-    if (turnDirection(vim1, vi, vip1) >= 0 && turnDirection(vi, vip1, v1) >= 0 && turnDirection(vip1, v1, v2) >= 0) {
+    if (orientation(vim1, vi, vip1) >= 0 && orientation(vi, vip1, v1) >= 0 && orientation(vip1, v1, v2) >= 0) {
       L.push(vip1);
     } else {
       break;
@@ -46,7 +46,7 @@ export function MP1 (P, initialLVertices) {
     while (L.length > 2) {
       const PmL = substractPolygons(P, L);
       // filter on L's bounding rectangle first ?
-      const notches = getNotches(PmL).filter(point => !isAVertex(point, L)).filter(point => inPolygon(point, L));
+      const notches = getNotches(PmL).filter(point => !isAVertex(point, L)).filter(point => inConvexPolygon(point, L));
       if (notches.length === 0) {
         break;
       }
@@ -93,7 +93,7 @@ export function MP1Prime (P, initialLVertices) {
   let vi = L[0];
   let vip1 = previousVertex(vi, P);
   while (L.length < P.length) {
-    if (turnDirection(vim1, vi, vip1) <= 0 && turnDirection(vi, vip1, vk) <= 0 && turnDirection(vip1, vk, vkm1) <= 0) {
+    if (orientation(vim1, vi, vip1) <= 0 && orientation(vi, vip1, vk) <= 0 && orientation(vip1, vk, vkm1) <= 0) {
       L.unshift(vip1);
     } else {
       break;
@@ -110,7 +110,7 @@ export function MP1Prime (P, initialLVertices) {
   } else {
     while (L.length > 2) {
       const PmL = substractPolygons(P, L);
-      const notches = getNotches(PmL).filter(point => !isAVertex(point, L)).filter(point => inPolygon(point, L));
+      const notches = getNotches(PmL).filter(point => !isAVertex(point, L)).filter(point => inConvexPolygon(point, L));
       if (notches.length === 0) {
         break;
       }

@@ -1,4 +1,4 @@
-import { EPSILON, getEdges, containsPolygon, containsEntirePolygon, isClockwiseOrdered, vertexEquality, turnDirection, substractPolygons, inPolygon, squaredDistance, lineIntersection, isFlat } from './utils.js';
+import { getEdges, containsPolygon, containsEntirePolygon, isClockwiseOrdered, vertexEquality, orientation, substractPolygons, inConvexPolygon, squaredDistance, lineIntersection, isFlat } from './utils.js';
 import { MP5Procedure } from './mp5.js';
 import { mergingAlgorithm, mergePolygons } from './merge.js';
 import { preprocessPolygon } from './common.js';
@@ -23,17 +23,9 @@ const segmentIntersectsPolygon = (segment, polygon) => {
       continue;
     }
 
-    const { ua, ub } = intersection;
-    if (ua > EPSILON && ub >= 0 && ua < (1 - EPSILON) && ub <= 1) {
+    const { insideSegment1, insideSegment2, onEdgeSegment1, onEdgeSegment2 } = intersection;
+    if ((insideSegment1 || onEdgeSegment1) && (insideSegment2 || onEdgeSegment2)) {
       return true;
-    } else if (ua === 0 && (ub === 0 || ub === 1)) {
-      console.log('beginning of segment on a vertex');
-      return true;
-    } else if (ua === 1 && (ub === 0 || ub === 1)) {
-      console.log('end of segment on a vertex');
-      return true;
-    } else if (ua >= 0 && ub >= 0 && ua <= 1 && ub <= 1) {
-      console.error('whaaaat ?', ua, ub);
     }
   }
   return false;
@@ -60,8 +52,8 @@ const getSegmentHoleIntersectionEdges = (segment, hole) => {
       continue;
     }
 
-    const { x, y, ua, ub } = intersection;
-    if (ua > EPSILON && ub >= 0 && ua < (1 - EPSILON) && ub <= 1) {
+    const { x, y, insideSegment1, insideSegment2, onEdgeSegment1, onEdgeSegment2 } = intersection;
+    if ((insideSegment1 || onEdgeSegment1) && (insideSegment2 || onEdgeSegment2)) {
       edges.push({
         x,
         y,
@@ -96,10 +88,11 @@ const drawTrueDiagonal = (diagonal, C, holesInC) => {
 
   let previousClosestVertexId = diagonal.b.id;
   while (edges.length > 0) {
-    const closestEdge = edges.sort(comparator).find(({ edge }) => {
-      return inPolygon(edge.a, C) || inPolygon(edge.b, C);
-    });
-    const closestVertex = Object.values(closestEdge.edge).filter(v => inPolygon(v, C)).sort(comparator)[0];
+    /* const closestEdge = edges.sort(comparator).find(({ edge }) => {
+      return inConvexPolygon(edge.a, C) || inConvexPolygon(edge.b, C);
+    }); */
+    const closestEdge = edges.sort(comparator)[0];
+    const closestVertex = Object.values(closestEdge.edge).filter(v => inConvexPolygon(v, C)).sort(comparator)[0];
 
     if (closestVertex.id === previousClosestVertexId) {
       return diagonal;
@@ -261,7 +254,7 @@ export function absHol (polygon, holes = []) {
       }
 
       if (Pu && Pj) {
-        if (turnDirection(i1, i2, i3) >= 0 && turnDirection(j1, j2, j3) >= 0) {
+        if (orientation(i1, i2, i3) >= 0 && orientation(j1, j2, j3) >= 0) {
           mergedPoly = mergedPoly.filter(poly => (poly !== Pu && poly !== Pj)).concat([mergePolygons(Pj, Pu)]);
         }
         break;

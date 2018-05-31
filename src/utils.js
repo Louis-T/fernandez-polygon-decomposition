@@ -1,10 +1,20 @@
+import robustCompare from 'robust-compare';
+import robustCompress from 'robust-compress';
+import robustOrientation from 'robust-orientation';
 import classifyPoint from 'robust-point-in-polygon';
+import robustProduct from 'robust-product';
+import robustDiff from 'robust-subtract';
 
 /**
  * Useful to avoid floating point problems.
- * May change in the future (maybe something greater than Number.EPSILON ?)
  */
-export const EPSILON = Number.EPSILON;
+export const EPSILON = 0.00000001;
+
+let robust = true;
+export const setRobustness = (bool) => {
+  robust = bool;
+};
+export const getRobustness = () => robust;
 
 /**
  * Compares two vertices of the same polygon. Both of the vertex must be defined by an unique id.
@@ -39,21 +49,47 @@ export function squaredDistance (point1, point2) {
 }
 
 /**
- * See https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order.
- * The sum is negative when clockwise ordered because we are on the web (y is inversed)
+ * Checks if the polygon is flat (its area is 0).
+ * Using orientation for robustness
+ *
+ * @param {{{ x: number, y: number, id: number }[]}} polygon
+ * @returns {boolean}
+ */
+export function isFlat (polygon) {
+  const polygonLength = polygon.length;
+  return polygon.every((point, index) => {
+    const previousPoint = polygon[(index - 1 + polygonLength) % polygonLength];
+    const nextPoint = polygon[(index + 1) % polygonLength];
+    return orientation(previousPoint, point, nextPoint) === 0;
+  });
+}
+
+/**
+ * Check if the polygon vertices are clockwise ordered.
+ * Using orientation for robustness
  *
  * @param {{ x: number, y: number}[]} polygon
  * @returns {boolean}
  */
 export function isClockwiseOrdered (polygon) {
-  const polygonLength = polygon.length;
-  let sum = 0;
-  for (let i = 0; i < polygonLength; i++) {
-    const a = polygon[i];
-    const b = polygon[(i + 1) % polygonLength];
-    sum += (b.x - a.x) * (b.y + a.y);
+  if (!isSimple(polygon)) {
+    throw new Error('The isClockwiseOrdered method only works with simple polygons');
   }
-  return sum < 0;
+
+  const polygonLength = polygon.length;
+
+  // find bottom right vertex
+  let bottomRightVertexIndex = 0;
+  let bottomRightVertex = polygon[0];
+  for (let i = 1; i < polygonLength; i++) {
+    const vertex = polygon[i];
+    if (vertex.y < bottomRightVertex.y || (vertex.y === bottomRightVertex.y && vertex.x > bottomRightVertex.x)) {
+      bottomRightVertex = vertex;
+      bottomRightVertexIndex = i;
+    }
+  }
+
+  return orientation(polygon[(bottomRightVertexIndex - 1 + polygonLength) % polygonLength], bottomRightVertex, polygon[(bottomRightVertexIndex + 1) % polygonLength]) > 0;
 }
 
 /**
@@ -80,8 +116,14 @@ export function orderClockwise (polygon) {
  * @param {{ x: number, y: number}} point3
  * @returns {number}
  */
-export function turnDirection (point1, point2, point3) {
-  return (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
+export function orientation (point1, point2, point3) {
+  if (robust) {
+    const o = robustOrientation([point1.x, point1.y], [point2.x, point2.y], [point3.x, point3.y]);
+    return o === 0 ? o : -o; // the y-axis is inverted
+  } else {
+    // return -((point1.y - point3.y) * (point2.x - point3.x) - (point1.x - point3.x) * (point2.y - point3.y));
+    return (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
+  }
 }
 
 /**
@@ -93,56 +135,72 @@ export function turnDirection (point1, point2, point3) {
  * @returns {number}
  */
 export function sideOfLine (point1, point2, point3) {
-  return (point1.x - point3.x) * (point2.y - point3.y) - (point2.x - point3.x) * (point1.y - point3.y);
+  return orientation(point2, point3, point1);
 }
 
-/*
+const VERTEX_CODE = 100;
+const EDGE_CODE = 101;
 
-function inPoly1 (point, polygon) {
-  const { x, y } = point;
-  var inside = false;
-  for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i].x, yi = polygon[i].y;
-      const xj = polygon[j].x, yj = polygon[j].y;
+/**
+ * Winding number algorithm.
+ * See https://en.wikipedia.org/wiki/Point_in_polygon?#Winding_number_algorithm
+ * And more specifically http://www.inf.usi.ch/hormann/papers/Hormann.2001.TPI.pdf
+ *
+ * @param {{ x: number, y: number}} point
+ * @param {{ x: number, y: number}[]} polygon
+ * @returns {number}
+ */
+function windingNumber (point, polygon) {
+  const polygonPoint = polygon[0];
+  if (polygonPoint.x === point.x && polygonPoint.y === point.y) {
+    return VERTEX_CODE;
+  }
 
-      console.log(x, (xj - xi) * (y - yi) / (yj - yi) + xi)
+  const polygonLength = polygon.length;
+  let wn = 0;
+  for (let i = 0; i < polygonLength; i++) {
+    const polygonPoint = polygon[i];
+    const nextPolygonPoint = polygon[(i + 1) % polygonLength];
 
-      if( ((yi > y) != (yj > y)) &&
-          (x < (xj - xi) * (y - yi) / (yj - yi) + xi) ) {
-          inside = !inside;
+    if (nextPolygonPoint.y === point.y) {
+      if (nextPolygonPoint.x === point.x) {
+        return VERTEX_CODE;
+      } else {
+        if (polygonPoint.y === point.y && (nextPolygonPoint.x > point.x) === (polygonPoint.x < point.x)) {
+          return EDGE_CODE;
+        }
       }
-  }
-  return inside;
-}
+    }
 
-function inPoly2 (point, polygon) {
-  let isInside = false;
-  let minX = polygon[0].x, maxX = polygon[0].x;
-  let minY = polygon[0].y, maxY = polygon[0].y;
-  for (let n = 1; n < polygon.length; n++) {
-    const q = polygon[n];
-    minX = Math.min(q.x, minX);
-    maxX = Math.max(q.x, maxX);
-    minY = Math.min(q.y, minY);
-    maxY = Math.max(q.y, maxY);
-  }
-
-  if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY) {
-    return false;
-  }
-
-  let i = 0, j = polygon.length - 1;
-  for (i, j; i < polygon.length; j = i++) {
-    if ((polygon[i].y > point.y) != (polygon[j].y > point.y) &&
-        (point.x <= (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x)) {
-      isInside = !isInside;
+    if ((polygonPoint.y < point.y) !== (nextPolygonPoint.y < point.y)) { // crossing
+      if (polygonPoint.x >= point.x) {
+        if (nextPolygonPoint.x > point.x) {
+          // wn += 2 * (nextPolygonPoint.y > polygonPoint.y ? 1 : -1) - 1;
+          wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+        } else {
+          const det = (polygonPoint.x - point.x) * (nextPolygonPoint.y - point.y) - (nextPolygonPoint.x - point.x) * (polygonPoint.y - point.y);
+          if (det === 0) {
+            return EDGE_CODE;
+          } else if ((det > 0) === (nextPolygonPoint.y > polygonPoint.y)) { // right_crossing
+            // wn += 2 * (nextPolygonPoint.y > polygonPoint.y ? 1 : -1) - 1;
+            wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+          }
+        }
+      } else {
+        if (nextPolygonPoint.x > point.x) {
+          const det = (polygonPoint.x - point.x) * (nextPolygonPoint.y - point.y) - (nextPolygonPoint.x - point.x) * (polygonPoint.y - point.y);
+          if (det === 0) {
+            return EDGE_CODE;
+          } else if ((det > 0) === (nextPolygonPoint.y > polygonPoint.y)) { // right_crossing
+            // wn += 2 * (nextPolygonPoint.y > polygonPoint.y ? 1 : -1) - 1;
+            wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+          }
+        }
+      }
     }
   }
-
-  return isInside;
+  return wn;
 }
-
-*/
 
 /**
  * Checks if the point is inside (or on the edge) of the polygon.
@@ -152,7 +210,27 @@ function inPoly2 (point, polygon) {
  * @returns {boolean}
  */
 export function inPolygon (point, polygon) {
-  return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
+  if (robust) {
+    return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
+  } else {
+    return windingNumber(point, polygon) !== 0;
+  }
+}
+
+/**
+ * Checks if the point is inside (or on the edge) of a convex polygon.
+ * We assume that the vertices are in clockwise order.
+ *
+ * @param {{ x: number, y: number}} point
+ * @param {{ x: number, y: number}[]} polygon
+ * @returns {boolean}
+ */
+export function inConvexPolygon (point, convexPolygon) {
+  const polygonLength = convexPolygon.length;
+  return convexPolygon.every((previousPoint, index) => {
+    const nextPoint = convexPolygon[(index + 1) % polygonLength];
+    return orientation(previousPoint, point, nextPoint) <= 0;
+  });
 }
 
 /**
@@ -231,7 +309,7 @@ export function isAVertex (point, polygon) {
 export function isANotch (vertex, polygon) {
   const polygonLength = polygon.length;
   const vertexIndex = polygon.findIndex(v => vertexEquality(vertex, v));
-  return turnDirection(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) < 0;
+  return orientation(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) < 0;
 }
 
 /**
@@ -243,7 +321,7 @@ export function isANotch (vertex, polygon) {
 export function getNotches (polygon) {
   const polygonLength = polygon.length;
   return polygon.filter((vertex, vertexIndex) => {
-    return turnDirection(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) < 0;
+    return orientation(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) < 0;
   });
 }
 
@@ -279,13 +357,13 @@ export function nextNotch (vertex, polygon) {
   const vertexIndex = polygon.findIndex(v => vertexEquality(vertex, v));
   let notchIndex = (vertexIndex + 1) % polygonLength;
   while (notchIndex !== vertexIndex) {
-    if (turnDirection(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
+    if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
       return polygon[notchIndex];
     }
     notchIndex = (notchIndex + 1) % polygonLength;
   }
   // if we started by the only notch, it will return the notch.
-  if (turnDirection(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
+  if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
     return polygon[notchIndex];
   }
   return null;
@@ -304,13 +382,13 @@ export function previousNotch (vertex, polygon) {
   const vertexIndex = polygon.findIndex(v => vertexEquality(vertex, v));
   let notchIndex = (vertexIndex - 1 + polygonLength) % polygonLength;
   while (notchIndex !== vertexIndex) {
-    if (turnDirection(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
+    if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
       return polygon[notchIndex];
     }
     notchIndex = (notchIndex - 1 + polygonLength) % polygonLength;
   }
   // if we started by the only notch, it will return the notch.
-  if (turnDirection(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
+  if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
     return polygon[notchIndex];
   }
   return null;
@@ -343,8 +421,73 @@ export function substractPolygons (polygon1, polygon2) {
 export function isConvex (polygon) {
   const polygonLength = polygon.length;
   return polygon.every((vertex, vertexIndex) => {
-    return turnDirection(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) >= 0;
+    return orientation(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) >= 0;
   });
+}
+
+/**
+ * Quick hack to convert a non-overlapping increasing sequence into a number.
+ *
+ * @param {number[]} sequence
+ * @returns {number}
+ */
+function robustSequenceToNumber (sequence) {
+  const compressedSequence = robustCompress([...sequence]);
+  return compressedSequence[compressedSequence.length - 1];
+}
+
+/**
+ * See http://paulbourke.net/geometry/pointlineplane/
+ * This method performs exact arithmetic calculations (except for the x and y values)
+ *
+ * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line1
+ * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line2
+ * @returns {{ x: number, y: number, insideSegment1: boolean, onEdgeSegment1: boolean, insideSegment2: boolean, onEdgeSegment2: boolean }}
+ */
+export function robustLineIntersection (line1, line2) {
+  const { a: { x: x1, y: y1 }, b: { x: x2, y: y2 } } = line1;
+  const { a: { x: x3, y: y3 }, b: { x: x4, y: y4 } } = line2;
+
+  const y4y3 = robustDiff([y4], [y3]);
+  const x2x1 = robustDiff([x2], [x1]);
+  const x4x3 = robustDiff([x4], [x3]);
+  const y2y1 = robustDiff([y2], [y1]);
+  const y1y3 = robustDiff([y1], [y3]);
+  const x1x3 = robustDiff([x1], [x3]);
+
+  const denom = robustDiff(robustProduct(y4y3, x2x1), robustProduct(x4x3, y2y1));
+  const robustDenomComparison = robustCompare(denom, [0]);
+
+  if (robustDenomComparison === 0) {
+    return null;
+  }
+
+  const ua = robustDiff(robustProduct(x4x3, y1y3), robustProduct(y4y3, x1x3));
+  const ub = robustDiff(robustProduct(x2x1, y1y3), robustProduct(y2y1, x1x3));
+
+  let comparisonUaMin, comparisonUaMax, comparisonUbMin, comparisonUbMax;
+  if (robustDenomComparison > 0) {
+    comparisonUaMin = robustCompare(ua, [0]);
+    comparisonUaMax = robustCompare(ua, denom);
+    comparisonUbMin = robustCompare(ub, [0]);
+    comparisonUbMax = robustCompare(ub, denom);
+  } else {
+    comparisonUaMin = robustCompare([0], ua);
+    comparisonUaMax = robustCompare(denom, ua);
+    comparisonUbMin = robustCompare([0], ub);
+    comparisonUbMax = robustCompare(denom, ub);
+  }
+
+  const nonRobustDenom = robustSequenceToNumber(denom);
+  // x and y are not exact numbers, but it is enough for the algo
+  return {
+    x: x1 + robustSequenceToNumber(robustProduct(ua, x2x1)) / nonRobustDenom,
+    y: y1 + robustSequenceToNumber(robustProduct(ua, y2y1)) / nonRobustDenom,
+    insideSegment1: comparisonUaMin > 0 && comparisonUaMax < 0,
+    onEdgeSegment1: comparisonUaMin === 0 || comparisonUaMax === 0,
+    insideSegment2: comparisonUbMin > 0 && comparisonUbMax < 0,
+    onEdgeSegment2: comparisonUbMin === 0 || comparisonUbMax === 0,
+  };
 }
 
 /**
@@ -352,23 +495,30 @@ export function isConvex (polygon) {
  *
  * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line1
  * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line2
- * @returns {{ x: number, y: number, ua: number, ub: number }}
+ * @returns {{ x: number, y: number, insideSegment1: boolean, onEdgeSegment1: boolean, insideSegment2: boolean, onEdgeSegment2: boolean }}
  */
 export function lineIntersection (line1, line2) {
+  if (robust) {
+    return robustLineIntersection(line1, line2);
+  }
+
   const { a: { x: x1, y: y1 }, b: { x: x2, y: y2 } } = line1;
   const { a: { x: x3, y: y3 }, b: { x: x4, y: y4 } } = line2;
 
   const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-  if (Math.abs(denom) < 0.000001) {
+  if (Math.abs(denom) < EPSILON) {
     return null;
   }
   const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
   const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
+
   return {
     x: x1 + ua * (x2 - x1),
     y: y1 + ua * (y2 - y1),
-    ua, // in segment1 : ua >= 0 && ua <= 1
-    ub, // in segment2 : ub >= 0 && ub <= 1
+    insideSegment1: ua > 0 && ua < 1,
+    onEdgeSegment1: ua === 0 || ua === 1,
+    insideSegment2: ub > 0 && ub < 1,
+    onEdgeSegment2: ub === 0 || ub === 1,
   };
 };
 
@@ -380,6 +530,10 @@ export function lineIntersection (line1, line2) {
  * @returns {boolean}
  */
 export function isSimple (polygon) {
+  if (polygon.length < 3) {
+    return true;
+  }
+
   const segments = [];
   for (let i = 0; i < polygon.length - 1; i++) {
     segments.push({
@@ -402,24 +556,8 @@ export function isSimple (polygon) {
         return false;
       }
 
-      const { ua, ub } = intersection;
-      return ua > 0 && ua < 1 && ub > 0 && ub < 1;
+      const { insideSegment1, insideSegment2 } = intersection;
+      return insideSegment1 && insideSegment2;
     });
   });
-}
-
-/**
- * Checks if the polygon is flat (its area is 0).
- * See https://en.wikipedia.org/wiki/Shoelace_formula
- *
- * @param {{{ x: number, y: number, id: number }[]}} polygon
- * @returns {boolean}
- */
-export function isFlat (polygon) {
-  const polygonLength = polygon.length;
-  return Math.abs(polygon.reduce((sum, { x, y }, index) => {
-    const { x: nextX, y: nextY } = polygon[(index + 1) % polygonLength];
-    sum += x * nextY - y * nextX;
-    return sum;
-  }, 0)) < 0.000001;
 }
