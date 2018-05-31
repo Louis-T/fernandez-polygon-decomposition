@@ -1,6 +1,6 @@
 {
   "name": "fernandez-polygon-decomposition",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "An algorithm to decompose polygons with holes from \"A practical algorithm for decomposing polygonal domains into convex polygons by diagonals\" by J Fernández",
   "main": "lib/index.js",
   "module": "es/index.js",
