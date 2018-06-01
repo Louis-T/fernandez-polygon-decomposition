@@ -96,7 +96,7 @@ But these kind of predicates are quite slow (compared to standard javascript ope
 If you can control your inputs (not having coordinates like `{ x: 253.79999999999998, y: 84.60000000000001 }` for example), it is best to disable this feature in order to gain a speed boost (multiple times faster).
 
 You can do so easily : `setRobustness(false);`
-Check [here](#setrobustness-getrobustness) for more details about this method.
+Check [here](#setrobustness---getrobustness) for more details about this method.
 
 
 
