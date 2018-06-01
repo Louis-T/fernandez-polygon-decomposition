@@ -26,7 +26,7 @@ function generateRandomStarShapedPolygon(n) {
     return vertices;
 }
 
-export default (algo) => {
+export default (algo, robustness) => {
     return () => {
         for(let i = 0; i <= 100; i++) {
             test(`${i} sides convex polygon`, () => {
@@ -362,6 +362,42 @@ export default (algo) => {
                     { x: 1000, y: 0},
                 ]
             ]);
+            expect(partition).toBeAConvexPartition();
+        });
+
+        // Only works in robust mode
+        (robustness ? test : test.skip)('weakly-in-simple n°2', () => {
+            const polygon = [
+                { x: 95, y: 84.60000000000001 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 665, y: 143.82000000000002 },
+                { x: 712.5, y: 160.74 },
+                { x: 475, y: 423 },
+                { x: 380, y: 253.79999999999998 },
+                { x: 285, y: 253.79999999999998 },
+                { x: 285, y: 338.40000000000003 },
+                { x: 475, y: 423 },
+                { x: 712.5, y: 160.74 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 475, y: 423 },
+                { x: 570, y: 592.1999999999999 },
+                { x: 665, y: 592.1999999999999 },
+                { x: 665, y: 507.59999999999997 },
+                { x: 475, y: 423 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 807.5, y: 169.20000000000002 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 855, y: 761.4 },
+                { x: 95, y: 761.4 },
+            ];
+            const partition = algo(polygon);
+            expect(partition.length).toBeGreaterThan(0);
             expect(partition).toBeAConvexPartition();
         });
     };
