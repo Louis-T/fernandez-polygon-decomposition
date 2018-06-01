@@ -7,7 +7,7 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
         setRobustness(robustness);
     });
 
-    describe('MP5 algorithm', makeAlgoSuite(MP5));
+    describe('MP5 algorithm', makeAlgoSuite(MP5, robustness));
 
     describe('getRobustness', () => {
         test(`It should return the correct value (${String(robustness)})`, () => {

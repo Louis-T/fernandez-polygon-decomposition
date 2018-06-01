@@ -125,7 +125,6 @@ function absHolProcedure (P, holes, idOffset) {
   let Q = [...P];
   while (true) {
     const { convexPolygon: C, end } = MP5Procedure(Q);
-
     let diagonal = { a: C[0], b: C[C.length - 1], hole: null };
 
     const holesLength = holes.length;

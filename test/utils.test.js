@@ -1,4 +1,4 @@
-import { orientation, sideOfLine, isSimple, isConvex, isClockwiseOrdered, isFlat, inPolygon, inConvexPolygon, polygonEquality, setRobustness, getRobustness } from '../src/utils';
+import { orientation, sideOfLine, isSimple, isConvex, isClockwiseOrdered, isFlat, inPolygon, inConvexPolygon, polygonEquality, setRobustness, getRobustness, containsPolygon } from '../src/utils';
 
 expect.extend({
     toHaveTheSameSignAs(received, argument) {
@@ -227,6 +227,40 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
             ];
             expect(isSimple(polygon)).toBe(true);
         });
+
+        // Only works in robust mode
+        (robustness ? test : test.skip)('weakly-in-simple n°1', () => {
+            const polygon = [
+                { x: 95, y: 84.60000000000001 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 665, y: 143.82000000000002 },
+                { x: 712.5, y: 160.74 },
+                { x: 475, y: 423 },
+                { x: 380, y: 253.79999999999998 },
+                { x: 285, y: 253.79999999999998 },
+                { x: 285, y: 338.40000000000003 },
+                { x: 475, y: 423 },
+                { x: 712.5, y: 160.74 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 475, y: 423 },
+                { x: 570, y: 592.1999999999999 },
+                { x: 665, y: 592.1999999999999 },
+                { x: 665, y: 507.59999999999997 },
+                { x: 475, y: 423 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 807.5, y: 169.20000000000002 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 855, y: 761.4 },
+                { x: 95, y: 761.4 },
+              ];
+            expect(isSimple(polygon)).toBe(true);
+        });
     
         test('not simple', () => {
             const polygon = [
@@ -261,6 +295,40 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
                 { x: 200, y: 0 },
                 { x: 100, y: 100 },
             ];
+            expect(isClockwiseOrdered(polygon)).toBe(true);
+        });
+
+        // Only works in robust mode
+        (robustness ? test : test.skip)('clockwise ordered n°3 (weakly-in-simple)', () => {
+            const polygon = [
+                { x: 95, y: 84.60000000000001 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 665, y: 143.82000000000002 },
+                { x: 712.5, y: 160.74 },
+                { x: 475, y: 423 },
+                { x: 380, y: 253.79999999999998 },
+                { x: 285, y: 253.79999999999998 },
+                { x: 285, y: 338.40000000000003 },
+                { x: 475, y: 423 },
+                { x: 712.5, y: 160.74 },
+                { x: 712.5, y: 126.89999999999999 },
+                { x: 760, y: 126.89999999999999 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 475, y: 423 },
+                { x: 570, y: 592.1999999999999 },
+                { x: 665, y: 592.1999999999999 },
+                { x: 665, y: 507.59999999999997 },
+                { x: 475, y: 423 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 807.5, y: 169.20000000000002 },
+                { x: 807.5, y: 126.89999999999999 },
+                { x: 855, y: 84.60000000000001 },
+                { x: 855, y: 761.4 },
+                { x: 95, y: 761.4 },
+              ];
             expect(isClockwiseOrdered(polygon)).toBe(true);
         });
     
@@ -525,6 +593,16 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
             const point = { x: -Number.EPSILON, y: 100 + EPSILON };
             expect(method(point, polygon)).toBe(false);
         });
+
+        test('point on edge n°1', () => {
+            const polygon = [
+                { x: 712.5, y: 160.74 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 475, y: 423 },
+            ];
+            const point = { x: 475, y: 423 };
+            expect(method(point, polygon)).toBe(true);
+        });
     
         test('point outside n°1', () => {
             const polygon = [
@@ -533,7 +611,7 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
                 { x: 350, y: 315 },
                 { x: 400, y: 250 },
             ];
-            const point =  { x: 620, y: 400 };
+            const point = { x: 620, y: 400 };
             expect(method(point, polygon)).toBe(false);
         });
     
@@ -569,6 +647,23 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
     
     describe('inPolygon', () => {
         inConvexPolygonSuite(inPolygon)();
+    });
+
+    describe('containsPolygon', () => {
+        test('test n°1', () => {
+            const polygon1 = [
+                { x: 712.5, y: 160.74 },
+                { x: 760, y: 169.20000000000002 },
+                { x: 475, y: 423 },
+            ];
+            const polygon2 = [
+                { x: 285, y: 253.79999999999998 },
+                { x: 380, y: 253.79999999999998 },
+                { x: 475, y: 423 },
+                { x: 285, y: 338.40000000000003 },
+            ];
+            expect(containsPolygon(polygon1, polygon2)).toBe(true);
+        });
     });
 
     describe('getRobustness', () => {

@@ -1,7 +1,6 @@
 import robustCompare from 'robust-compare';
 import robustCompress from 'robust-compress';
 import robustOrientation from 'robust-orientation';
-import classifyPoint from 'robust-point-in-polygon';
 import robustProduct from 'robust-product';
 import robustDiff from 'robust-subtract';
 
@@ -203,6 +202,74 @@ function windingNumber (point, polygon) {
 }
 
 /**
+ * Winding number algorithm.
+ * Using robust arithmetic.
+ *
+ * @param {{ x: number, y: number}} point
+ * @param {{ x: number, y: number}[]} polygon
+ * @returns {number}
+ */
+function robustWindingNumber (point, polygon) {
+  const polygonPoint = polygon[0];
+  if (polygonPoint.x === point.x && polygonPoint.y === point.y) {
+    return VERTEX_CODE;
+  }
+
+  const polygonLength = polygon.length;
+  let wn = 0;
+  for (let i = 0; i < polygonLength; i++) {
+    const polygonPoint = polygon[i];
+    const nextPolygonPoint = polygon[(i + 1) % polygonLength];
+
+    if (nextPolygonPoint.y === point.y) {
+      if (nextPolygonPoint.x === point.x) {
+        return VERTEX_CODE;
+      } else {
+        if (polygonPoint.y === point.y && (nextPolygonPoint.x > point.x) === (polygonPoint.x < point.x)) {
+          return EDGE_CODE;
+        }
+      }
+    }
+
+    if ((polygonPoint.y < point.y) !== (nextPolygonPoint.y < point.y)) { // crossing
+      if (polygonPoint.x >= point.x) {
+        if (nextPolygonPoint.x > point.x) {
+          // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+          wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+        } else {
+          const det = robustDiff(
+            robustProduct(robustDiff([polygonPoint.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])),
+            robustProduct(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([polygonPoint.y], [point.y]))
+          );
+          const detComparison = robustCompare(det, [0]);
+          if (detComparison === 0) {
+            return EDGE_CODE;
+          } else if ((detComparison > 0) === (nextPolygonPoint.y > polygonPoint.y)) { // right_crossing
+            // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+            wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+          }
+        }
+      } else {
+        if (nextPolygonPoint.x > point.x) {
+          const det = robustDiff(
+            robustProduct(robustDiff([polygonPoint.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])),
+            robustProduct(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([polygonPoint.y], [point.y]))
+          );
+          const detComparison = robustCompare(det, [0]);
+          if (detComparison === 0) {
+            return EDGE_CODE;
+          } else if ((detComparison > 0) === (nextPolygonPoint.y > polygonPoint.y)) { // right_crossing
+            // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+            wn += nextPolygonPoint.y > polygonPoint.y ? 1 : -1;
+          }
+        }
+      }
+    }
+  }
+  return wn;
+}
+
+/**
  * Checks if the point is inside (or on the edge) of the polygon.
  *
  * @param {{ x: number, y: number}} point
@@ -211,7 +278,8 @@ function windingNumber (point, polygon) {
  */
 export function inPolygon (point, polygon) {
   if (robust) {
-    return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
+    // return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
+    return robustWindingNumber(point, polygon) !== 0;
   } else {
     return windingNumber(point, polygon) !== 0;
   }
@@ -222,7 +290,7 @@ export function inPolygon (point, polygon) {
  * We assume that the vertices are in clockwise order.
  *
  * @param {{ x: number, y: number}} point
- * @param {{ x: number, y: number}[]} polygon
+ * @param {{ x: number, y: number}[]} convexPolygon
  * @returns {boolean}
  */
 export function inConvexPolygon (point, convexPolygon) {

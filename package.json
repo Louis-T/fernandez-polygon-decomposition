@@ -26,7 +26,6 @@
     "robust-compare": "^1.0.0",
     "robust-compress": "^1.0.0",
     "robust-orientation": "^1.1.3",
-    "robust-point-in-polygon": "^1.0.3",
     "robust-product": "^1.0.0",
     "robust-subtract": "^1.0.0"
   },
