@@ -116,6 +116,10 @@
 			canvas.width = canvas.offsetWidth;
 			canvas.height = canvas.offsetHeight;
 			const ctx = canvas.getContext('2d');
+			canvas.addEventListener('click', (e) => {
+				const bcr = e.target.getBoundingClientRect();
+				console.log('position on canvas :', e.clientX - bcr.left, e.clientY - bcr.top);
+			});
 
 			const contourList = generateContourList(canvas.width, canvas.height);
 			const holesList = generateHolesList(canvas.width, canvas.height);

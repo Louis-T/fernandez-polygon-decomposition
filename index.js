@@ -646,107 +646,6 @@ return d[d.length-1];};return ", funcName].join("");
   generateOrientationProc();
   });
 
-  var robustPnp = robustPointInPolygon;
-
-
-
-  function robustPointInPolygon(vs, point) {
-    var x = point[0];
-    var y = point[1];
-    var n = vs.length;
-    var inside = 1;
-    var lim = n;
-    for(var i = 0, j = n-1; i<lim; j=i++) {
-      var a = vs[i];
-      var b = vs[j];
-      var yi = a[1];
-      var yj = b[1];
-      if(yj < yi) {
-        if(yj < y && y < yi) {
-          var s = orientation_1(a, b, point);
-          if(s === 0) {
-            return 0
-          } else {
-            inside ^= (0 < s)|0;
-          }
-        } else if(y === yi) {
-          var c = vs[(i+1)%n];
-          var yk = c[1];
-          if(yi < yk) {
-            var s = orientation_1(a, b, point);
-            if(s === 0) {
-              return 0
-            } else {
-              inside ^= (0 < s)|0;
-            }
-          }
-        }
-      } else if(yi < yj) {
-        if(yi < y && y < yj) {
-          var s = orientation_1(a, b, point);
-          if(s === 0) {
-            return 0
-          } else {
-            inside ^= (s < 0)|0;
-          }
-        } else if(y === yi) {
-          var c = vs[(i+1)%n];
-          var yk = c[1];
-          if(yk < yi) {
-            var s = orientation_1(a, b, point);
-            if(s === 0) {
-              return 0
-            } else {
-              inside ^= (s < 0)|0;
-            }
-          }
-        }
-      } else if(y === yi) {
-        var x0 = Math.min(a[0], b[0]);
-        var x1 = Math.max(a[0], b[0]);
-        if(i === 0) {
-          while(j>0) {
-            var k = (j+n-1)%n;
-            var p = vs[k];
-            if(p[1] !== y) {
-              break
-            }
-            var px = p[0];
-            x0 = Math.min(x0, px);
-            x1 = Math.max(x1, px);
-            j = k;
-          }
-          if(j === 0) {
-            if(x0 <= x && x <= x1) {
-              return 0
-            }
-            return 1 
-          }
-          lim = j+1;
-        }
-        var y0 = vs[(j+n-1)%n][1];
-        while(i+1<lim) {
-          var p = vs[i+1];
-          if(p[1] !== y) {
-            break
-          }
-          var px = p[0];
-          x0 = Math.min(x0, px);
-          x1 = Math.max(x1, px);
-          i += 1;
-        }
-        if(x0 <= x && x <= x1) {
-          return 0
-        }
-        var y1 = vs[(i+1)%n][1];
-        if(x < x0 && (y0 < y !== y1 < y)) {
-          inside ^= 1;
-        }
-      }
-    }
-    return 2 * inside - 1
-  }
-
   var product = robustProduct;
 
   function robustProduct(a, b) {
@@ -1055,6 +954,71 @@ return d[d.length-1];};return ", funcName].join("");
   }
 
   /**
+   * Winding number algorithm.
+   * Using robust arithmetic.
+   *
+   * @param {{ x: number, y: number}} point
+   * @param {{ x: number, y: number}[]} polygon
+   * @returns {number}
+   */
+  function robustWindingNumber(point, polygon) {
+    var polygonPoint = polygon[0];
+    if (polygonPoint.x === point.x && polygonPoint.y === point.y) {
+      return VERTEX_CODE;
+    }
+
+    var polygonLength = polygon.length;
+    var wn = 0;
+    for (var i = 0; i < polygonLength; i++) {
+      var _polygonPoint2 = polygon[i];
+      var nextPolygonPoint = polygon[(i + 1) % polygonLength];
+
+      if (nextPolygonPoint.y === point.y) {
+        if (nextPolygonPoint.x === point.x) {
+          return VERTEX_CODE;
+        } else {
+          if (_polygonPoint2.y === point.y && nextPolygonPoint.x > point.x === _polygonPoint2.x < point.x) {
+            return EDGE_CODE;
+          }
+        }
+      }
+
+      if (_polygonPoint2.y < point.y !== nextPolygonPoint.y < point.y) {
+        // crossing
+        if (_polygonPoint2.x >= point.x) {
+          if (nextPolygonPoint.x > point.x) {
+            // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+            wn += nextPolygonPoint.y > _polygonPoint2.y ? 1 : -1;
+          } else {
+            var det = robustDiff(product(robustDiff([_polygonPoint2.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])), product(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([_polygonPoint2.y], [point.y])));
+            var detComparison = cmp(det, [0]);
+            if (detComparison === 0) {
+              return EDGE_CODE;
+            } else if (detComparison > 0 === nextPolygonPoint.y > _polygonPoint2.y) {
+              // right_crossing
+              // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+              wn += nextPolygonPoint.y > _polygonPoint2.y ? 1 : -1;
+            }
+          }
+        } else {
+          if (nextPolygonPoint.x > point.x) {
+            var _det2 = robustDiff(product(robustDiff([_polygonPoint2.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])), product(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([_polygonPoint2.y], [point.y])));
+            var _detComparison = cmp(_det2, [0]);
+            if (_detComparison === 0) {
+              return EDGE_CODE;
+            } else if (_detComparison > 0 === nextPolygonPoint.y > _polygonPoint2.y) {
+              // right_crossing
+              // wn += 2 * ((nextPolygonPoint.y > polygonPoint.y) | 0) - 1;
+              wn += nextPolygonPoint.y > _polygonPoint2.y ? 1 : -1;
+            }
+          }
+        }
+      }
+    }
+    return wn;
+  }
+
+  /**
    * Checks if the point is inside (or on the edge) of the polygon.
    *
    * @param {{ x: number, y: number}} point
@@ -1063,11 +1027,8 @@ return d[d.length-1];};return ", funcName].join("");
    */
   function inPolygon(point, polygon) {
     if (robust) {
-      return robustPnp(polygon.map(function (_ref) {
-        var x = _ref.x,
-            y = _ref.y;
-        return [x, y];
-      }), [point.x, point.y]) <= 0;
+      // return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
+      return robustWindingNumber(point, polygon) !== 0;
     } else {
       return windingNumber(point, polygon) !== 0;
     }
@@ -1078,7 +1039,7 @@ return d[d.length-1];};return ", funcName].join("");
    * We assume that the vertices are in clockwise order.
    *
    * @param {{ x: number, y: number}} point
-   * @param {{ x: number, y: number}[]} polygon
+   * @param {{ x: number, y: number}[]} convexPolygon
    * @returns {boolean}
    */
   function inConvexPolygon(point, convexPolygon) {
