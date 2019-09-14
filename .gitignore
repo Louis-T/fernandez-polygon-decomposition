@@ -7,3 +7,5 @@ lib
 demo/*
 !demo/index.html
 !demo/examples.js
+yarn-error.log
+
