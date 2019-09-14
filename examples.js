@@ -55,6 +55,24 @@ export const generateContourList = (maxWidth, maxHeight) => {
       { x: 0.9 * maxWidth, y: 0.9 * maxHeight },
       { x: 0.1 * maxWidth, y: 0.9 * maxHeight },
     ],
+    [
+      { x: 0.1 * maxWidth, y: 0.4 * maxHeight },
+      { x: 0.2 * maxWidth, y: 0.25 * maxHeight },
+      { x: 0.3 * maxWidth, y: 0.15 * maxHeight },
+      { x: 0.4 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.6 * maxWidth, y: 0.1 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.15 * maxHeight },
+      { x: 0.8 * maxWidth, y: 0.25 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.4 * maxHeight },
+      { x: 0.9 * maxWidth, y: 0.6 * maxHeight },
+      { x: 0.8 * maxWidth, y: 0.65 * maxHeight },
+      { x: 0.7 * maxWidth, y: 0.75 * maxHeight },
+      { x: 0.6 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.4 * maxWidth, y: 0.9 * maxHeight },
+      { x: 0.3 * maxWidth, y: 0.75 * maxHeight },
+      { x: 0.2 * maxWidth, y: 0.65 * maxHeight },
+      { x: 0.1 * maxWidth, y: 0.6 * maxHeight },
+    ],
   ];
 };
 

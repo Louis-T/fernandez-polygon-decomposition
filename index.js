@@ -1,8 +1,169 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.fernandezPolygonDecomposition = {})));
-}(this, (function (exports) { 'use strict';
+  (global = global || self, factory(global.fernandezPolygonDecomposition = {}));
+}(this, function (exports) { 'use strict';
+
+  function _typeof(obj) {
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(source, true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(source).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
+    }
+
+    return target;
+  }
+
+  function _objectWithoutProperties(source, excluded) {
+    if (source == null) return {};
+
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+
+    var key, i;
+
+    if (Object.getOwnPropertySymbols) {
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+      for (i = 0; i < sourceSymbolKeys.length; i++) {
+        key = sourceSymbolKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+      }
+    }
+
+    return target;
+  }
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+      return;
+    }
+
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  }
 
   var robustDiff = robustSubtract;
 
@@ -671,91 +832,11 @@ return d[d.length-1];};return ", funcName].join("");
     return r
   }
 
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  };
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  var objectWithoutProperties = function (obj, keys) {
-    var target = {};
-
-    for (var i in obj) {
-      if (keys.indexOf(i) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
-    }
-
-    return target;
-  };
-
-  var slicedToArray = function () {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-
-      try {
-        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-          _arr.push(_s.value);
-
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
-      }
-
-      return _arr;
-    }
-
-    return function (arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
-      } else {
-        throw new TypeError("Invalid attempt to destructure non-iterable instance");
-      }
-    };
-  }();
-
-  var toConsumableArray = function (arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    } else {
-      return Array.from(arr);
-    }
-  };
-
   /**
    * Useful to avoid floating point problems.
    */
-  var EPSILON = 0.00000001;
 
+  var EPSILON = 0.00000001;
   var robust = true;
   var setRobustness = function setRobustness(bool) {
     robust = bool;
@@ -763,7 +844,6 @@ return d[d.length-1];};return ", funcName].join("");
   var getRobustness = function getRobustness() {
     return robust;
   };
-
   /**
    * Compares two vertices of the same polygon. Both of the vertex must be defined by an unique id.
    *
@@ -771,31 +851,48 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }} vertex2
    * @returns {boolean}
    */
+
   function vertexEquality(vertex1, vertex2) {
     if (vertex1.id === undefined || vertex2.id === undefined) {
       throw new Error('A vertex must be defined by an unique id.');
     }
+
     return vertex1.id === vertex2.id;
   }
+  /**
+   * Compares two vertices. Both of the vertex must be defined by an unique id and optionnally by an originalId.
+   * This method is used to compare vertices after the absoption phase of the absHol procedure.
+   *
+   * @param {{ x: number, y: number, id: number, originalId: number }} vertex1
+   * @param {{ x: number, y: number, id: number, originalId: number }} vertex2
+   * @returns {boolean}
+   */
 
+  function vertexEqualityAfterAbsorption(vertex1, vertex2) {
+    if (vertex1.id === undefined || vertex2.id === undefined) {
+      throw new Error('A vertex must be defined by an unique id.');
+    }
+
+    return (vertex1.originalId || vertex1.id) === (vertex2.originalId || vertex2.id);
+  }
   /**
    * @param {{ x: number, y: number }} point1
    * @param {{ x: number, y: number }} point2
    * @returns {boolean}
    */
+
   function pointEquality(point1, point2) {
     return point1.x === point2.x && point1.y === point2.y;
   }
-
   /**
    * @param {{ x: number, y: number }} point1
    * @param {{ x: number, y: number }} point2
    * @returns {number}
    */
+
   function squaredDistance(point1, point2) {
     return (point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y);
   }
-
   /**
    * Checks if the polygon is flat (its area is 0).
    * Using orientation for robustness
@@ -803,6 +900,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{{ x: number, y: number, id: number }[]}} polygon
    * @returns {boolean}
    */
+
   function isFlat(polygon) {
     var polygonLength = polygon.length;
     return polygon.every(function (point, index) {
@@ -811,7 +909,6 @@ return d[d.length-1];};return ", funcName].join("");
       return orientation(previousPoint, point, nextPoint) === 0;
     });
   }
-
   /**
    * Check if the polygon vertices are clockwise ordered.
    * Using orientation for robustness
@@ -819,18 +916,20 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}[]} polygon
    * @returns {boolean}
    */
+
   function isClockwiseOrdered(polygon) {
     if (!isSimple(polygon)) {
       throw new Error('The isClockwiseOrdered method only works with simple polygons');
     }
 
-    var polygonLength = polygon.length;
+    var polygonLength = polygon.length; // find bottom right vertex
 
-    // find bottom right vertex
     var bottomRightVertexIndex = 0;
     var bottomRightVertex = polygon[0];
+
     for (var i = 1; i < polygonLength; i++) {
       var vertex = polygon[i];
+
       if (vertex.y < bottomRightVertex.y || vertex.y === bottomRightVertex.y && vertex.x > bottomRightVertex.x) {
         bottomRightVertex = vertex;
         bottomRightVertexIndex = i;
@@ -839,20 +938,20 @@ return d[d.length-1];};return ", funcName].join("");
 
     return orientation(polygon[(bottomRightVertexIndex - 1 + polygonLength) % polygonLength], bottomRightVertex, polygon[(bottomRightVertexIndex + 1) % polygonLength]) > 0;
   }
-
   /**
    * This method always returns a new array
    *
    * @param {{ x: number, y: number}[]} polygon
    * @returns {{ x: number, y: number}[]}
    */
+
   function orderClockwise(polygon) {
     if (!isClockwiseOrdered(polygon)) {
-      return [].concat(toConsumableArray(polygon)).reverse();
+      return _toConsumableArray(polygon).reverse();
     }
-    return [].concat(toConsumableArray(polygon));
-  }
 
+    return _toConsumableArray(polygon);
+  }
   /**
    * See https://stackoverflow.com/questions/38856588/given-three-coordinate-points-how-do-you-detect-when-the-angle-between-them-cro.
    * The three points are in clockwise order.
@@ -864,6 +963,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}} point3
    * @returns {number}
    */
+
   function orientation(point1, point2, point3) {
     if (robust) {
       var o = orientation_1([point1.x, point1.y], [point2.x, point2.y], [point3.x, point3.y]);
@@ -873,7 +973,6 @@ return d[d.length-1];};return ", funcName].join("");
       return (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x);
     }
   }
-
   /**
    * Checks on which side of the line (point2, point3) the point point1 is.
    *
@@ -882,13 +981,12 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}} point3
    * @returns {number}
    */
+
   function sideOfLine(point1, point2, point3) {
     return orientation(point2, point3, point1);
   }
-
   var VERTEX_CODE = 100;
   var EDGE_CODE = 101;
-
   /**
    * Winding number algorithm.
    * See https://en.wikipedia.org/wiki/Point_in_polygon?#Winding_number_algorithm
@@ -898,14 +996,17 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}[]} polygon
    * @returns {number}
    */
+
   function windingNumber(point, polygon) {
     var polygonPoint = polygon[0];
+
     if (polygonPoint.x === point.x && polygonPoint.y === point.y) {
       return VERTEX_CODE;
     }
 
     var polygonLength = polygon.length;
     var wn = 0;
+
     for (var i = 0; i < polygonLength; i++) {
       var _polygonPoint = polygon[i];
       var nextPolygonPoint = polygon[(i + 1) % polygonLength];
@@ -928,6 +1029,7 @@ return d[d.length-1];};return ", funcName].join("");
             wn += nextPolygonPoint.y > _polygonPoint.y ? 1 : -1;
           } else {
             var det = (_polygonPoint.x - point.x) * (nextPolygonPoint.y - point.y) - (nextPolygonPoint.x - point.x) * (_polygonPoint.y - point.y);
+
             if (det === 0) {
               return EDGE_CODE;
             } else if (det > 0 === nextPolygonPoint.y > _polygonPoint.y) {
@@ -939,6 +1041,7 @@ return d[d.length-1];};return ", funcName].join("");
         } else {
           if (nextPolygonPoint.x > point.x) {
             var _det = (_polygonPoint.x - point.x) * (nextPolygonPoint.y - point.y) - (nextPolygonPoint.x - point.x) * (_polygonPoint.y - point.y);
+
             if (_det === 0) {
               return EDGE_CODE;
             } else if (_det > 0 === nextPolygonPoint.y > _polygonPoint.y) {
@@ -950,9 +1053,9 @@ return d[d.length-1];};return ", funcName].join("");
         }
       }
     }
+
     return wn;
   }
-
   /**
    * Winding number algorithm.
    * Using robust arithmetic.
@@ -961,14 +1064,18 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}[]} polygon
    * @returns {number}
    */
+
+
   function robustWindingNumber(point, polygon) {
     var polygonPoint = polygon[0];
+
     if (polygonPoint.x === point.x && polygonPoint.y === point.y) {
       return VERTEX_CODE;
     }
 
     var polygonLength = polygon.length;
     var wn = 0;
+
     for (var i = 0; i < polygonLength; i++) {
       var _polygonPoint2 = polygon[i];
       var nextPolygonPoint = polygon[(i + 1) % polygonLength];
@@ -992,6 +1099,7 @@ return d[d.length-1];};return ", funcName].join("");
           } else {
             var det = robustDiff(product(robustDiff([_polygonPoint2.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])), product(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([_polygonPoint2.y], [point.y])));
             var detComparison = cmp(det, [0]);
+
             if (detComparison === 0) {
               return EDGE_CODE;
             } else if (detComparison > 0 === nextPolygonPoint.y > _polygonPoint2.y) {
@@ -1003,7 +1111,9 @@ return d[d.length-1];};return ", funcName].join("");
         } else {
           if (nextPolygonPoint.x > point.x) {
             var _det2 = robustDiff(product(robustDiff([_polygonPoint2.x], [point.x]), robustDiff([nextPolygonPoint.y], [point.y])), product(robustDiff([nextPolygonPoint.x], [point.x]), robustDiff([_polygonPoint2.y], [point.y])));
+
             var _detComparison = cmp(_det2, [0]);
+
             if (_detComparison === 0) {
               return EDGE_CODE;
             } else if (_detComparison > 0 === nextPolygonPoint.y > _polygonPoint2.y) {
@@ -1015,9 +1125,9 @@ return d[d.length-1];};return ", funcName].join("");
         }
       }
     }
+
     return wn;
   }
-
   /**
    * Checks if the point is inside (or on the edge) of the polygon.
    *
@@ -1025,6 +1135,8 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}[]} polygon
    * @returns {boolean}
    */
+
+
   function inPolygon(point, polygon) {
     if (robust) {
       // return classifyPoint(polygon.map(({ x, y }) => [x, y]), [point.x, point.y]) <= 0;
@@ -1033,7 +1145,6 @@ return d[d.length-1];};return ", funcName].join("");
       return windingNumber(point, polygon) !== 0;
     }
   }
-
   /**
    * Checks if the point is inside (or on the edge) of a convex polygon.
    * We assume that the vertices are in clockwise order.
@@ -1042,6 +1153,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number}[]} convexPolygon
    * @returns {boolean}
    */
+
   function inConvexPolygon(point, convexPolygon) {
     var polygonLength = convexPolygon.length;
     return convexPolygon.every(function (previousPoint, index) {
@@ -1049,7 +1161,6 @@ return d[d.length-1];};return ", funcName].join("");
       return orientation(previousPoint, point, nextPoint) <= 0;
     });
   }
-
   /**
    * Check if the polygon polygon2 is (at least partially) contained by the polygon polygon1.
    *
@@ -1057,6 +1168,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon2
    * @returns {boolean}
    */
+
   function containsPolygon(polygon1, polygon2) {
     return polygon2.some(function (vertex) {
       return inPolygon(vertex, polygon1);
@@ -1069,6 +1181,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon2
    * @returns {boolean}
    */
+
   function containsEntirePolygon(polygon1, polygon2) {
     return polygon2.every(function (vertex) {
       return inPolygon(vertex, polygon1);
@@ -1081,17 +1194,19 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {{ x: number, y: number, id: number }}
    */
+
   function nextVertex(vertex, polygon) {
     var polygonLength = polygon.length;
     var vertexIndex = polygon.findIndex(function (v) {
       return vertexEquality(vertex, v);
     });
+
     if (vertexIndex === -1) {
       throw new Error('could not find vertex');
     }
+
     return polygon[(vertexIndex + 1) % polygonLength];
   }
-
   /**
    * Given a vertex of one polygon, returns the previous vertex (in clockwise order) of this polygon.
    *
@@ -1099,17 +1214,19 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {{ x: number, y: number, id: number }}
    */
+
   function previousVertex(vertex, polygon) {
     var polygonLength = polygon.length;
     var vertexIndex = polygon.findIndex(function (v) {
       return vertexEquality(vertex, v);
     });
+
     if (vertexIndex === -1) {
       throw new Error('could not find vertex');
     }
+
     return polygon[(vertexIndex - 1 + polygonLength) % polygonLength];
   }
-
   /**
    * Checks if a point is one of the vertex of a polygon.
    *
@@ -1117,25 +1234,25 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {boolean}
    */
+
   function isAVertex(point, polygon) {
     return polygon.some(function (v) {
       return pointEquality(v, point);
     });
   }
-
   /**
    * Returns all the notches of a given polygon.
    *
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {{ x: number, y: number, id: number }[]}
    */
+
   function getNotches(polygon) {
     var polygonLength = polygon.length;
     return polygon.filter(function (vertex, vertexIndex) {
       return orientation(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) < 0;
     });
   }
-
   /**
    * Returns all the edges of a given polygon.
    * An edge is one segment between two consecutive vertex of the polygon.
@@ -1143,15 +1260,18 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {{ a: { x: number, y: number, id: number }, b: { x: number, y: number, id: number }}[]}
    */
+
   function getEdges(polygon) {
     var edges = [];
     var polygonLength = polygon.length;
+
     for (var i = 0; i < polygonLength; i++) {
       edges.push({
         a: polygon[i],
         b: polygon[(i + 1) % polygonLength]
       });
     }
+
     return edges;
   }
   /**
@@ -1162,25 +1282,29 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {({ x: number, y: number, id: number }|null)}
    */
+
   function nextNotch(vertex, polygon) {
     var polygonLength = polygon.length;
     var vertexIndex = polygon.findIndex(function (v) {
       return vertexEquality(vertex, v);
     });
     var notchIndex = (vertexIndex + 1) % polygonLength;
+
     while (notchIndex !== vertexIndex) {
       if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
         return polygon[notchIndex];
       }
+
       notchIndex = (notchIndex + 1) % polygonLength;
-    }
-    // if we started by the only notch, it will return the notch.
+    } // if we started by the only notch, it will return the notch.
+
+
     if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
       return polygon[notchIndex];
     }
+
     return null;
   }
-
   /**
    * Given a vertex of one polygon, returns the previous notch (in clockwise order) of this polygon.
    * Returns null if there are no notch in the polygon.
@@ -1189,25 +1313,29 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {({ x: number, y: number, id: number }|null)}
    */
+
   function previousNotch(vertex, polygon) {
     var polygonLength = polygon.length;
     var vertexIndex = polygon.findIndex(function (v) {
       return vertexEquality(vertex, v);
     });
     var notchIndex = (vertexIndex - 1 + polygonLength) % polygonLength;
+
     while (notchIndex !== vertexIndex) {
       if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
         return polygon[notchIndex];
       }
+
       notchIndex = (notchIndex - 1 + polygonLength) % polygonLength;
-    }
-    // if we started by the only notch, it will return the notch.
+    } // if we started by the only notch, it will return the notch.
+
+
     if (orientation(polygon[(notchIndex - 1 + polygonLength) % polygonLength], polygon[notchIndex], polygon[(notchIndex + 1) % polygonLength]) < 0) {
       return polygon[notchIndex];
     }
+
     return null;
   }
-
   /**
    * Removes polygon2 from polygon1.
    * polygon2 vertices must be a subset of polygon1 vertices
@@ -1216,6 +1344,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon2
    * @returns {{ x: number, y: number, id: number }[]}
    */
+
   function substractPolygons(polygon1, polygon2) {
     // const firstIndex = polygon1.findIndex(p => pointEquality(p, polygon2[0]));
     // const lastIndex = polygon1.findIndex(p => pointEquality(p, polygon2[polygon2.length - 1]));
@@ -1225,35 +1354,35 @@ return d[d.length-1];};return ", funcName].join("");
     var lastIndex = polygon1.findIndex(function (p) {
       return vertexEquality(p, polygon2[polygon2.length - 1]);
     });
+
     if (firstIndex < lastIndex) {
-      return [].concat(toConsumableArray(polygon1.slice(0, firstIndex)), [polygon1[firstIndex]], toConsumableArray(polygon1.slice(lastIndex)));
+      return [].concat(_toConsumableArray(polygon1.slice(0, firstIndex)), [polygon1[firstIndex]], _toConsumableArray(polygon1.slice(lastIndex)));
     } else {
-      return [].concat(toConsumableArray(polygon1.slice(lastIndex, firstIndex + 1)));
+      return _toConsumableArray(polygon1.slice(lastIndex, firstIndex + 1));
     }
   }
-
   /**
    * @param {{{ x: number, y: number, id: number }[]}} polygon
    * @return {boolean}
    */
+
   function isConvex(polygon) {
     var polygonLength = polygon.length;
     return polygon.every(function (vertex, vertexIndex) {
       return orientation(polygon[(vertexIndex - 1 + polygonLength) % polygonLength], vertex, polygon[(vertexIndex + 1) % polygonLength]) >= 0;
     });
   }
-
   /**
    * Quick hack to convert a non-overlapping increasing sequence into a number.
    *
    * @param {number[]} sequence
    * @returns {number}
    */
+
   function robustSequenceToNumber(sequence) {
-    var compressedSequence = compress([].concat(toConsumableArray(sequence)));
+    var compressedSequence = compress(_toConsumableArray(sequence));
     return compressedSequence[compressedSequence.length - 1];
   }
-
   /**
    * See http://paulbourke.net/geometry/pointlineplane/
    * This method performs exact arithmetic calculations (except for the x and y values)
@@ -1262,6 +1391,8 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line2
    * @returns {{ x: number, y: number, insideSegment1: boolean, onEdgeSegment1: boolean, insideSegment2: boolean, onEdgeSegment2: boolean }}
    */
+
+
   function robustLineIntersection(line1, line2) {
     var _line1$a = line1.a,
         x1 = _line1$a.x,
@@ -1275,15 +1406,12 @@ return d[d.length-1];};return ", funcName].join("");
         _line2$b = line2.b,
         x4 = _line2$b.x,
         y4 = _line2$b.y;
-
-
     var y4y3 = robustDiff([y4], [y3]);
     var x2x1 = robustDiff([x2], [x1]);
     var x4x3 = robustDiff([x4], [x3]);
     var y2y1 = robustDiff([y2], [y1]);
     var y1y3 = robustDiff([y1], [y3]);
     var x1x3 = robustDiff([x1], [x3]);
-
     var denom = robustDiff(product(y4y3, x2x1), product(x4x3, y2y1));
     var robustDenomComparison = cmp(denom, [0]);
 
@@ -1293,11 +1421,8 @@ return d[d.length-1];};return ", funcName].join("");
 
     var ua = robustDiff(product(x4x3, y1y3), product(y4y3, x1x3));
     var ub = robustDiff(product(x2x1, y1y3), product(y2y1, x1x3));
+    var comparisonUaMin, comparisonUaMax, comparisonUbMin, comparisonUbMax;
 
-    var comparisonUaMin = void 0,
-        comparisonUaMax = void 0,
-        comparisonUbMin = void 0,
-        comparisonUbMax = void 0;
     if (robustDenomComparison > 0) {
       comparisonUaMin = cmp(ua, [0]);
       comparisonUaMax = cmp(ua, denom);
@@ -1310,8 +1435,8 @@ return d[d.length-1];};return ", funcName].join("");
       comparisonUbMax = cmp(denom, ub);
     }
 
-    var nonRobustDenom = robustSequenceToNumber(denom);
-    // x and y are not exact numbers, but it is enough for the algo
+    var nonRobustDenom = robustSequenceToNumber(denom); // x and y are not exact numbers, but it is enough for the algo
+
     return {
       x: x1 + robustSequenceToNumber(product(ua, x2x1)) / nonRobustDenom,
       y: y1 + robustSequenceToNumber(product(ua, y2y1)) / nonRobustDenom,
@@ -1321,7 +1446,6 @@ return d[d.length-1];};return ", funcName].join("");
       onEdgeSegment2: comparisonUbMin === 0 || comparisonUbMax === 0
     };
   }
-
   /**
    * See http://paulbourke.net/geometry/pointlineplane/
    *
@@ -1329,6 +1453,7 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ a: { x: number, y: number }, b: { x: number, y: number }}} line2
    * @returns {{ x: number, y: number, insideSegment1: boolean, onEdgeSegment1: boolean, insideSegment2: boolean, onEdgeSegment2: boolean }}
    */
+
   function lineIntersection(line1, line2) {
     if (robust) {
       return robustLineIntersection(line1, line2);
@@ -1346,15 +1471,14 @@ return d[d.length-1];};return ", funcName].join("");
         _line2$b2 = line2.b,
         x4 = _line2$b2.x,
         y4 = _line2$b2.y;
-
-
     var denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+
     if (Math.abs(denom) < EPSILON) {
       return null;
     }
+
     var ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
     var ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
-
     return {
       x: x1 + ua * (x2 - x1),
       y: y1 + ua * (y2 - y1),
@@ -1371,18 +1495,21 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon
    * @returns {boolean}
    */
+
   function isSimple(polygon) {
     if (polygon.length < 3) {
       return true;
     }
 
     var segments = [];
+
     for (var i = 0; i < polygon.length - 1; i++) {
       segments.push({
         a: polygon[i],
         b: polygon[i + 1]
       });
     }
+
     segments.push({
       a: polygon[polygon.length - 1],
       b: polygon[0]
@@ -1394,19 +1521,18 @@ return d[d.length-1];};return ", funcName].join("");
         }
 
         var intersection = lineIntersection(segment1, segment2);
+
         if (intersection === null) {
           return false;
         }
 
         var insideSegment1 = intersection.insideSegment1,
             insideSegment2 = intersection.insideSegment2;
-
         return insideSegment1 && insideSegment2;
       });
     });
   }
 
-  // P is a polygon (vertices are clockwise ordered)
   /**
    * This is the MP1 procedure taken from "Algorithms for the decomposition of a polygon into convex polygons" by J. Fernandez et al.
    * The variable names (for the most part) are named according to the publication.
@@ -1415,15 +1541,21 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} initialLVertices The initial vertices for the polygon L
    * @returns {{ L: { x: number, y: number, id: number }[], end: boolean }}
    */
+
   function MP1(P, initialLVertices) {
     if (P.length < 4) {
-      return { L: [].concat(toConsumableArray(P)), end: true };
+      return {
+        L: _toConsumableArray(P),
+        end: true
+      };
     }
 
-    var L = [].concat(toConsumableArray(initialLVertices));
+    var L = _toConsumableArray(initialLVertices);
+
     if (L.length < 1) {
       L.push(P[0]);
     }
+
     if (L.length < 2) {
       L.push(nextVertex(L[0], P));
     }
@@ -1433,40 +1565,51 @@ return d[d.length-1];};return ", funcName].join("");
     var vim1 = v1;
     var vi = v2;
     var vip1 = nextVertex(vi, P);
+
     while (L.length < P.length) {
       if (orientation(vim1, vi, vip1) >= 0 && orientation(vi, vip1, v1) >= 0 && orientation(vip1, v1, v2) >= 0) {
         L.push(vip1);
       } else {
         break;
       }
+
       vim1 = vi;
       vi = vip1;
       vip1 = nextVertex(vi, P);
     }
 
     if (P.length === L.length) {
-      return { L: L, end: true };
+      return {
+        L: L,
+        end: true
+      };
     } else if (L.length < 2) {
-      return { L: L, end: true };
+      return {
+        L: L,
+        end: true
+      };
     } else {
       var _loop = function _loop() {
-        var PmL = substractPolygons(P, L);
-        // filter on L's bounding rectangle first ?
+        var PmL = substractPolygons(P, L); // filter on L's bounding rectangle first ?
+
         var notches = getNotches(PmL).filter(function (point) {
           return !isAVertex(point, L);
         }).filter(function (point) {
           return inConvexPolygon(point, L);
         });
+
         if (notches.length === 0) {
-          return 'break';
+          return "break";
         }
+
         var v1 = L[0];
         var k = L.length;
         var vk = L[k - 1];
-
         L = L.slice(0, -1); // L.filter(point => !vertexEquality(point, vk));
+
         notches.forEach(function (notch) {
           var sideOfVk = Math.sign(sideOfLine(vk, v1, notch));
+
           if (sideOfVk !== 0) {
             L = L.filter(function (point) {
               return Math.sign(sideOfLine(point, v1, notch)) !== sideOfVk;
@@ -1478,12 +1621,15 @@ return d[d.length-1];};return ", funcName].join("");
       while (L.length > 2) {
         var _ret = _loop();
 
-        if (_ret === 'break') break;
+        if (_ret === "break") break;
       }
-      return { L: L, end: false };
+
+      return {
+        L: L,
+        end: false
+      };
     }
   }
-
   /**
    * This is the MP1' procedure taken from "Algorithms for the decomposition of a polygon into convex polygons" by J. Fernandez et al.
    * The variable names (for the most part) are named according to the publication.
@@ -1492,15 +1638,21 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} initialLVertices The initial vertices for the polygon L
    * @returns {{ L: { x: number, y: number, id: number }[], end: boolean }}
    */
+
   function MP1Prime(P, initialLVertices) {
     if (P.length < 4) {
-      return { L: [].concat(toConsumableArray(P)), end: true };
+      return {
+        L: _toConsumableArray(P),
+        end: true
+      };
     }
 
-    var L = [].concat(toConsumableArray(initialLVertices));
+    var L = _toConsumableArray(initialLVertices);
+
     if (L.length < 1) {
       L.unshift(P[0]);
     }
+
     if (L.length < 2) {
       L.unshift(previousVertex(L[0], P));
     }
@@ -1510,21 +1662,29 @@ return d[d.length-1];};return ", funcName].join("");
     var vim1 = L[1];
     var vi = L[0];
     var vip1 = previousVertex(vi, P);
+
     while (L.length < P.length) {
       if (orientation(vim1, vi, vip1) <= 0 && orientation(vi, vip1, vk) <= 0 && orientation(vip1, vk, vkm1) <= 0) {
         L.unshift(vip1);
       } else {
         break;
       }
+
       vim1 = vi;
       vi = vip1;
       vip1 = previousVertex(vi, P);
     }
 
     if (P.length === L.length) {
-      return { L: L, end: true };
+      return {
+        L: L,
+        end: true
+      };
     } else if (L.length < 2) {
-      return { L: L, end: true };
+      return {
+        L: L,
+        end: true
+      };
     } else {
       var _loop2 = function _loop2() {
         var PmL = substractPolygons(P, L);
@@ -1533,17 +1693,19 @@ return d[d.length-1];};return ", funcName].join("");
         }).filter(function (point) {
           return inConvexPolygon(point, L);
         });
-        if (notches.length === 0) {
-          return 'break';
-        }
 
-        // CCW order
+        if (notches.length === 0) {
+          return "break";
+        } // CCW order
+
+
         var v1 = L[L.length - 1];
         var vk = L[0];
-
         L = L.slice(1); // L.filter(point => !vertexEquality(point, vk));
+
         notches.forEach(function (notch) {
           var sideOfVk = Math.sign(sideOfLine(vk, v1, notch));
+
           if (sideOfVk !== 0) {
             L = L.filter(function (point) {
               return Math.sign(sideOfLine(point, v1, notch)) !== sideOfVk;
@@ -1555,17 +1717,20 @@ return d[d.length-1];};return ", funcName].join("");
       while (L.length > 2) {
         var _ret2 = _loop2();
 
-        if (_ret2 === 'break') break;
+        if (_ret2 === "break") break;
       }
-      return { L: L, end: false };
+
+      return {
+        L: L,
+        end: false
+      };
     }
   }
 
   function rotateRight(arr, n) {
     var length = arr.length;
-    return [].concat(toConsumableArray(arr.slice(length - n)), toConsumableArray(arr.slice(0, length - n)));
+    return [].concat(_toConsumableArray(arr.slice(length - n)), _toConsumableArray(arr.slice(0, length - n)));
   }
-
   /**
    * Merges two polygons.
    * polygon1 and polygon2 should be convex and share an edge (= two consecutive vertices)
@@ -1574,13 +1739,16 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} polygon2
    * @returns {{ x: number, y: number, id: number }[]}
    */
+
+
   function mergePolygons(polygon1, polygon2) {
+    // const sharedVertices = polygon1.map((v1, index) => [index, polygon2.findIndex(v2 => pointEquality(v1, v2))]).filter(([_, v2Index]) => v2Index > -1); // can be problematic when a point corresponds to several vertices
     var sharedVertices = polygon1.map(function (v1, index) {
       return [index, polygon2.findIndex(function (v2) {
-        return pointEquality(v1, v2);
+        return vertexEqualityAfterAbsorption(v1, v2);
       })];
     }).filter(function (_ref) {
-      var _ref2 = slicedToArray(_ref, 2),
+      var _ref2 = _slicedToArray(_ref, 2),
           _ = _ref2[0],
           v2Index = _ref2[1];
 
@@ -1589,16 +1757,15 @@ return d[d.length-1];};return ", funcName].join("");
     var polygon1Length = polygon1.length;
 
     if (sharedVertices.length !== 2) {
-      throw new Error('sharedVertices length should be 2 : ' + JSON.stringify(sharedVertices));
+      throw new Error("sharedVertices length should be 2 : ".concat(JSON.stringify(sharedVertices)));
     }
 
     if ((sharedVertices[0][0] + 1) % polygon1Length === sharedVertices[1][0]) {
-      return [].concat(toConsumableArray(rotateRight(polygon1, polygon1Length - sharedVertices[1][0])), toConsumableArray(rotateRight(polygon2, polygon2.length - sharedVertices[0][1]).slice(1, -1)));
+      return [].concat(_toConsumableArray(rotateRight(polygon1, polygon1Length - sharedVertices[1][0])), _toConsumableArray(rotateRight(polygon2, polygon2.length - sharedVertices[0][1]).slice(1, -1)));
     } else {
-      return [].concat(toConsumableArray(rotateRight(polygon1, polygon1Length - sharedVertices[0][0])), toConsumableArray(rotateRight(polygon2, polygon2.length - sharedVertices[1][1]).slice(1, -1)));
+      return [].concat(_toConsumableArray(rotateRight(polygon1, polygon1Length - sharedVertices[0][0])), _toConsumableArray(rotateRight(polygon2, polygon2.length - sharedVertices[1][1]).slice(1, -1)));
     }
   }
-
   /**
    * Procedure to remove inessential diagonals from the partition of convex polygons.
    *
@@ -1606,14 +1773,15 @@ return d[d.length-1];};return ", funcName].join("");
    * @params {{ i2: { x: number, y: number, id: number }, j2: { x: number, y: number, id: number }, rightPolygon: { x: number, y: number, id: number }[][], leftPolygon: { x: number, y: number, id: number }[][] }[]}
    * @returns {{ x: number, y: number, id: number }[][]}
    */
+
   function mergingAlgorithm(polygons, LLE) {
     if (polygons.length < 2) {
       return polygons;
-    }
+    } // LDP[poly] = true means that the polygon `poly` is one of the definitive polygons of the partition after the merging process.
 
-    // LDP[poly] = true means that the polygon `poly` is one of the definitive polygons of the partition after the merging process.
-    var LDP = new Map();
-    // LUP[poly1] = poly2 means that the polygon `poly1` is part of the polygon `poly2`.
+
+    var LDP = new Map(); // LUP[poly1] = poly2 means that the polygon `poly1` is part of the polygon `poly2`.
+
     var LUP = new Map();
     polygons.forEach(function (poly) {
       LDP.set(poly, true);
@@ -1630,35 +1798,37 @@ return d[d.length-1];};return ", funcName].join("");
           j2 = _LLE$j.j2,
           rightPolygon = _LLE$j.rightPolygon,
           leftPolygon = _LLE$j.leftPolygon;
-
       var Pj = LUP.get(leftPolygon);
       var Pu = LUP.get(rightPolygon);
       var PjLength = Pj.length;
-      var PuLength = Pu.length;
+      var PuLength = Pu.length; // custom nextVertex & previousVertex to take into account the originalId (for absHol)
 
-      // custom nextVertex & previousVertex to take into account the originalId (for absHol)
       var i1 = Pu[(Pu.findIndex(function (v) {
-        return (v.originalId || v.id) === (i2.originalId || i2.id);
+        return vertexEqualityAfterAbsorption(v, i2);
       }) + PuLength - 1) % PuLength]; // previousVertex(i2, Pu);
+
       var i3 = Pj[(Pj.findIndex(function (v) {
-        return (v.originalId || v.id) === (i2.originalId || i2.id);
+        return vertexEqualityAfterAbsorption(v, i2);
       }) + 1) % PjLength]; // nextVertex(i2, Pj);
+
       var j1 = Pj[(Pj.findIndex(function (v) {
-        return (v.originalId || v.id) === (j2.originalId || j2.id);
+        return vertexEqualityAfterAbsorption(v, j2);
       }) + PjLength - 1) % PjLength]; // previousVertex(j2, Pj)
+
       var j3 = Pu[(Pu.findIndex(function (v) {
-        return (v.originalId || v.id) === (j2.originalId || j2.id);
+        return vertexEqualityAfterAbsorption(v, j2);
       }) + 1) % PuLength]; //  nextVertex(j2, Pu);
 
       if (orientation(i1, i2, i3) >= 0 && orientation(j1, j2, j3) >= 0) {
         var P = mergePolygons(Pj, Pu);
+
         if (!isConvex(P)) {
           throw new Error('mergePolygons is not convex !');
         }
+
         LDP.set(Pj, false);
         LDP.set(Pu, false);
         LDP.set(P, true);
-
         LUP.set(P, P);
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
@@ -1677,8 +1847,8 @@ return d[d.length-1];};return ", funcName].join("");
           _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
             }
           } finally {
             if (_didIteratorError) {
@@ -1693,14 +1863,14 @@ return d[d.length-1];};return ", funcName].join("");
       _loop(j);
     }
 
-    return [].concat(toConsumableArray(LDP.entries())).filter(function (_ref3) {
-      var _ref4 = slicedToArray(_ref3, 2),
+    return _toConsumableArray(LDP.entries()).filter(function (_ref3) {
+      var _ref4 = _slicedToArray(_ref3, 2),
           _ = _ref4[0],
           inPartition = _ref4[1];
 
       return inPartition;
     }).map(function (_ref5) {
-      var _ref6 = slicedToArray(_ref5, 1),
+      var _ref6 = _slicedToArray(_ref5, 1),
           polygon = _ref6[0];
 
       return polygon;
@@ -1709,12 +1879,13 @@ return d[d.length-1];};return ", funcName].join("");
 
   function preprocessPolygon(polygon) {
     var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
     var polygonLength = polygon.length;
     return polygon.filter(function (vertex, index) {
       return !pointEquality(vertex, polygon[(index + 1) % polygonLength]);
     }).map(function (vertex, index) {
-      return _extends({}, vertex, { id: index + offset });
+      return _objectSpread2({}, vertex, {
+        id: index + offset
+      });
     });
   }
 
@@ -1725,24 +1896,27 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }} startingVertex
    * @returns {{ L: { x: number, y: number, id: number }[], end: boolean }}
    */
+
   function MP5Procedure(polygon) {
     var startingVertex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : polygon[0];
 
     if (polygon.length < 4) {
       return {
-        convexPolygon: [].concat(toConsumableArray(polygon)),
+        convexPolygon: _toConsumableArray(polygon),
         end: true
       };
     }
 
     var startingNotch = nextNotch(startingVertex, polygon);
+
     if (startingNotch === null) {
       // the polygon is convex if there is no notch in it
       return {
-        convexPolygon: [].concat(toConsumableArray(polygon)),
+        convexPolygon: _toConsumableArray(polygon),
         end: true
       };
     }
+
     var currentNotch = startingNotch;
 
     var _loop = function _loop() {
@@ -1757,8 +1931,9 @@ return d[d.length-1];};return ", funcName].join("");
             end: true
           }
         };
-      }
-      // MP1 + notch checking = MP3
+      } // MP1 + notch checking = MP3
+
+
       if (cwL.length > 2 && getNotches(polygon).some(function (vertex) {
         return vertexEquality(vertex, cwL[0]) || vertexEquality(vertex, cwL[cwL.length - 1]);
       })) {
@@ -1776,7 +1951,7 @@ return d[d.length-1];};return ", funcName].join("");
     do {
       var _ret = _loop();
 
-      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+      if (_typeof(_ret) === "object") return _ret.v;
     } while (!vertexEquality(currentNotch, startingNotch));
 
     currentNotch = startingNotch;
@@ -1793,8 +1968,9 @@ return d[d.length-1];};return ", funcName].join("");
             end: true
           }
         };
-      }
-      // MP1 + notch checking = MP3
+      } // MP1 + notch checking = MP3
+
+
       if (ccwL.length > 2 && getNotches(polygon).some(function (vertex) {
         return vertexEquality(vertex, ccwL[0]) || vertexEquality(vertex, ccwL[ccwL.length - 1]);
       })) {
@@ -1812,35 +1988,36 @@ return d[d.length-1];};return ", funcName].join("");
     do {
       var _ret2 = _loop2();
 
-      if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+      if (_typeof(_ret2) === "object") return _ret2.v;
     } while (!vertexEquality(currentNotch, startingNotch));
 
     throw new Error('ERROR MP5Procedure 3');
   }
-
   /**
    * This is the full MP5 algorithm taken from "A practical algorithm for decomposing polygonal domains into convex polygons by diagonals"
    *
    * @param {{ x: number, y: number }[]} polygon
    * @returns {{ x: number, y: number }[][]} The partition of convex polygons
    */
+
   function MP5(polygon) {
     if (!Array.isArray(polygon)) {
       throw new Error('MP5 can only take an array of points {x, y} as input');
     }
+
     if (polygon.length <= 2) {
       return [polygon];
     }
+
     if (!isClockwiseOrdered(polygon)) {
       throw new Error('MP5 can only work with clockwise ordered polygon');
-    }
+    } // L is containing the convex polygons.
 
-    // L is containing the convex polygons.
-    var L = [];
-    // LLE is a list containing the diagonals of the partition. It will be used to merge inessential diagonals.
-    var LLE = [];
 
-    // Adds an id to each vertex.
+    var L = []; // LLE is a list containing the diagonals of the partition. It will be used to merge inessential diagonals.
+
+    var LLE = []; // Adds an id to each vertex.
+
     var P = preprocessPolygon(polygon);
 
     var _loop3 = function _loop3() {
@@ -1848,10 +2025,11 @@ return d[d.length-1];};return ", funcName].join("");
           convexPolygon = _MP5Procedure.convexPolygon,
           end = _MP5Procedure.end;
 
-      var diagonal = { a: convexPolygon[0], b: convexPolygon[convexPolygon.length - 1] };
-
+      var diagonal = {
+        a: convexPolygon[0],
+        b: convexPolygon[convexPolygon.length - 1]
+      };
       L.push(convexPolygon);
-
       getEdges(convexPolygon).forEach(function (edge) {
         for (var i = 0; i < LLE.length; i++) {
           var _LLE$i = LLE[i],
@@ -1866,7 +2044,7 @@ return d[d.length-1];};return ", funcName].join("");
       });
 
       if (end) {
-        return 'break';
+        return "break";
       }
 
       LLE.push({
@@ -1874,21 +2052,23 @@ return d[d.length-1];};return ", funcName].join("");
         j2: diagonal.a,
         rightPolygon: convexPolygon
       });
-
       P = substractPolygons(P, convexPolygon);
     };
 
     while (true) {
       var _ret3 = _loop3();
 
-      if (_ret3 === 'break') break;
+      if (_ret3 === "break") break;
     }
 
     return mergingAlgorithm(L, LLE).map(function (poly) {
       return poly.map(function (_ref) {
         var x = _ref.x,
             y = _ref.y;
-        return { x: x, y: y };
+        return {
+          x: x,
+          y: y
+        };
       });
     });
   }
@@ -1900,15 +2080,17 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number }[]} polygon
    * @returns {boolean}
    */
+
   var segmentIntersectsPolygon = function segmentIntersectsPolygon(segment, polygon) {
     var polygonLength = polygon.length;
+
     for (var i = 0; i < polygonLength; i++) {
       var edge = {
         a: polygon[(i - 1 + polygonLength) % polygonLength],
         b: polygon[i]
       };
-
       var intersection = lineIntersection(segment, edge);
+
       if (intersection === null) {
         continue;
       }
@@ -1922,9 +2104,9 @@ return d[d.length-1];};return ", funcName].join("");
         return true;
       }
     }
+
     return false;
   };
-
   /**
    * Returns all the edges of the given hole that intersects the given segment.
    *
@@ -1932,16 +2114,19 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[]} hole
    * @returns {{ x: number, y: number, edge: { a: { x: number, y: number }, b: { x: number, y: number }}, hole: { x: number, y: number, id: number }[] }[]}
    */
+
+
   var getSegmentHoleIntersectionEdges = function getSegmentHoleIntersectionEdges(segment, hole) {
     var edges = [];
     var holeLength = hole.length;
+
     for (var i = 0; i < holeLength; i++) {
       var edge = {
         a: hole[(i - 1 + holeLength) % holeLength],
         b: hole[i]
       };
-
       var intersection = lineIntersection(segment, edge);
+
       if (intersection === null) {
         continue;
       }
@@ -1962,15 +2147,14 @@ return d[d.length-1];};return ", funcName].join("");
         });
       }
     }
+
     return edges;
   };
 
   var rotateLeft = function rotateLeft(a) {
     var i = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-
-    return [].concat(toConsumableArray(a.slice(i)), toConsumableArray(a.slice(0, i)));
+    return [].concat(_toConsumableArray(a.slice(i)), _toConsumableArray(a.slice(0, i)));
   };
-
   /**
    * This is the DrawTrueDiagonal procedure taken from "A practical algorithm for decomposing polygonal domains into convex polygons by diagonals"
    *
@@ -1979,6 +2163,8 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number, id: number }[][]} holesInC
    * @returns {{ a: { x: number, y: number }, b: { x: number, y: number }, hole: { x: number, y: number, id: number }[]}}
    */
+
+
   var drawTrueDiagonal = function drawTrueDiagonal(diagonal, C, holesInC) {
     var comparator = function comparator(a, b) {
       return squaredDistance(diagonal.a, a) - squaredDistance(diagonal.a, b);
@@ -1986,13 +2172,15 @@ return d[d.length-1];};return ", funcName].join("");
 
     var edges = [];
     var holesInCLength = holesInC.length;
+
     for (var i = 0; i < holesInCLength; i++) {
       var _edges;
 
-      (_edges = edges).push.apply(_edges, toConsumableArray(getSegmentHoleIntersectionEdges(diagonal, holesInC[i])));
+      (_edges = edges).push.apply(_edges, _toConsumableArray(getSegmentHoleIntersectionEdges(diagonal, holesInC[i])));
     }
 
     var previousClosestVertexId = diagonal.b.id;
+
     while (edges.length > 0) {
       /* const closestEdge = edges.sort(comparator).find(({ edge }) => {
         return inConvexPolygon(edge.a, C) || inConvexPolygon(edge.b, C);
@@ -2006,19 +2194,23 @@ return d[d.length-1];};return ", funcName].join("");
         return diagonal;
       }
 
-      diagonal = { a: diagonal.a, b: closestVertex, hole: closestEdge.hole };
-
+      diagonal = {
+        a: diagonal.a,
+        b: closestVertex,
+        hole: closestEdge.hole
+      };
       previousClosestVertexId = closestVertex.id;
       edges = [];
+
       for (var _i = 0; _i < holesInCLength; _i++) {
         var _edges2;
 
-        (_edges2 = edges).push.apply(_edges2, toConsumableArray(getSegmentHoleIntersectionEdges(diagonal, holesInC[_i])));
+        (_edges2 = edges).push.apply(_edges2, _toConsumableArray(getSegmentHoleIntersectionEdges(diagonal, holesInC[_i])));
       }
     }
+
     return diagonal;
   };
-
   /**
    * This is the AbsHol algorithm taken from "A practical algorithm for decomposing polygonal domains into convex polygons by diagonals"
    *
@@ -2027,29 +2219,37 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {number} idOffset
    * @returns {{ LPCP: { x: number, y: number, id: number }[][], trueDiagonals: { a: { x: number, y: number, id: number }, b: { x: number, y: number, id: number } }[] , LLE: { i2: { x: number, y: number, id: number }, j2: { x: number, y: number, id: number }, rightPolygon: { x: number, y: number, id: number }[][], leftPolygon: { x: number, y: number, id: number }[][] }[] }} The partition of convex polygons
    */
+
+
   function absHolProcedure(P, holes, idOffset) {
     var LLE = [];
     var trueDiagonals = [];
     var LPCP = [];
 
-    var Q = [].concat(toConsumableArray(P));
+    var Q = _toConsumableArray(P);
 
     var _loop = function _loop() {
       var _MP5Procedure = MP5Procedure(Q),
           C = _MP5Procedure.convexPolygon,
           end = _MP5Procedure.end;
 
-      var diagonal = { a: C[0], b: C[C.length - 1], hole: null };
-
+      var diagonal = {
+        a: C[0],
+        b: C[C.length - 1],
+        hole: null
+      };
       var holesLength = holes.length;
       var diagonalIsCutByAHole = false;
       var holesInC = [];
+
       for (var i = 0; i < holesLength; i++) {
         var hole = holes[i];
+
         if (!diagonalIsCutByAHole && segmentIntersectsPolygon(diagonal, hole)) {
           diagonalIsCutByAHole = true;
           diagonal.hole = hole;
         }
+
         if (containsPolygon(C, hole)) {
           holesInC.push(hole);
         }
@@ -2057,16 +2257,19 @@ return d[d.length-1];};return ", funcName].join("");
 
       if (diagonalIsCutByAHole || holesInC.length > 0) {
         if (!diagonalIsCutByAHole) {
-          diagonal = { a: C[0], b: holesInC[0][0], hole: holesInC[0] };
+          diagonal = {
+            a: C[0],
+            b: holesInC[0][0],
+            hole: holesInC[0]
+          };
         }
 
         var _drawTrueDiagonal = drawTrueDiagonal(diagonal, C, holesInC),
             HPrime = _drawTrueDiagonal.hole,
-            dPrime = objectWithoutProperties(_drawTrueDiagonal, ['hole']);
+            dPrime = _objectWithoutProperties(_drawTrueDiagonal, ["hole"]);
 
-        trueDiagonals.push(dPrime);
+        trueDiagonals.push(dPrime); // Absorption of H'
 
-        // Absorption of H'
         holes = holes.filter(function (hole) {
           return hole !== HPrime;
         });
@@ -2076,21 +2279,25 @@ return d[d.length-1];};return ", funcName].join("");
         var rotatedHPrime = rotateLeft(HPrime, HPrime.findIndex(function (v) {
           return vertexEquality(v, dPrime.b);
         }) + 1).reverse();
-
         var viIndexInQ = Q.findIndex(function (v) {
           return vertexEquality(v, vi);
         });
-        Q = [].concat(toConsumableArray(Q.slice(0, viIndexInQ + 1)), toConsumableArray(rotatedHPrime), [_extends({}, rotatedHPrime[0], { id: id1, originalId: rotatedHPrime[0].id.originalId || rotatedHPrime[0].id }), _extends({}, vi, { id: id2, originalId: vi.originalId || vi.id })], toConsumableArray(Q.slice(viIndexInQ + 1)));
+        Q = [].concat(_toConsumableArray(Q.slice(0, viIndexInQ + 1)), _toConsumableArray(rotatedHPrime), [_objectSpread2({}, rotatedHPrime[0], {
+          id: id1,
+          originalId: rotatedHPrime[0].id.originalId || rotatedHPrime[0].id
+        }), _objectSpread2({}, vi, {
+          id: id2,
+          originalId: vi.originalId || vi.id
+        })], _toConsumableArray(Q.slice(viIndexInQ + 1)));
       } else {
         LPCP.push(C);
-
         getEdges(C).forEach(function (edge) {
           for (var _i2 = 0; _i2 < LLE.length; _i2++) {
             var _LLE$_i = LLE[_i2],
                 diagonalA = _LLE$_i.i2,
                 diagonalB = _LLE$_i.j2;
 
-            if ((diagonalA.originalId || diagonalA.id) === (edge.b.originalId || edge.b.id) && (diagonalB.originalId || diagonalB.id) === (edge.a.originalId || edge.a.id)) {
+            if (vertexEqualityAfterAbsorption(diagonalA, edge.b) && vertexEqualityAfterAbsorption(diagonalB, edge.a)) {
               LLE[_i2].leftPolygon = C;
               break;
             }
@@ -2098,7 +2305,7 @@ return d[d.length-1];};return ", funcName].join("");
         });
 
         if (end) {
-          return 'break';
+          return "break";
         }
 
         LLE.push({
@@ -2106,7 +2313,6 @@ return d[d.length-1];};return ", funcName].join("");
           j2: diagonal.a,
           rightPolygon: C
         });
-
         Q = substractPolygons(Q, C);
       }
     };
@@ -2114,12 +2320,15 @@ return d[d.length-1];};return ", funcName].join("");
     while (true) {
       var _ret = _loop();
 
-      if (_ret === 'break') break;
+      if (_ret === "break") break;
     }
 
-    return { LPCP: LPCP, trueDiagonals: trueDiagonals, LLE: LLE };
+    return {
+      LPCP: LPCP,
+      trueDiagonals: trueDiagonals,
+      LLE: LLE
+    };
   }
-
   /**
    * An implementation of the algorithm presented in "A practical algorithm for decomposing polygonal domains into convex polygons by diagonals"
    * It will decompose a polygon (with or without holes) in a partition of convex polygons.
@@ -2128,29 +2337,33 @@ return d[d.length-1];};return ", funcName].join("");
    * @param {{ x: number, y: number }[][]} holes
    * @returns {{ x: number, y: number }[][]} The partition of convex polygons
    */
+
+
   function absHol(polygon) {
     var holes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
     if (!Array.isArray(polygon)) {
       throw new Error('absHol can only take an array of points {x, y} as input');
     }
+
     if (polygon.length <= 2) {
       return [polygon];
     }
+
     if (!isClockwiseOrdered(polygon)) {
       throw new Error('absHol can only work with clockwise ordered vertices');
-    }
-    // en mode dev : vérifier que les holes sont bien tous dans polygon
+    } // Assert every holes are in the polygon. TODO : disable in prod ??
+
+
     if (!holes.every(function (hole) {
       return containsEntirePolygon(polygon, hole);
     })) {
       throw new Error('One or more holes are not totally inside the polygon !');
-    }
+    } // Starting the ids at 1 to ensure there are no problem when computing the diagonals (originalId || id)
 
-    // Starting the ids at 1 to ensure there are no problem when computing the diagonals (originalId || id)
+
     var preprocessedPolygon = preprocessPolygon(polygon, 1);
     var offset = preprocessedPolygon.length + 1;
-
     var preprocessedHoles = holes.map(function (hole) {
       var preprocessedHole = preprocessPolygon(hole, offset);
       offset += preprocessedHole.length;
@@ -2160,26 +2373,17 @@ return d[d.length-1];};return ", funcName].join("");
     var _absHolProcedure = absHolProcedure(preprocessedPolygon, preprocessedHoles, offset),
         LPCP = _absHolProcedure.LPCP,
         trueDiagonals = _absHolProcedure.trueDiagonals,
-        LLE = _absHolProcedure.LLE;
-
-    // Removing "flat" polygons
+        LLE = _absHolProcedure.LLE; // Removing "flat" polygons
 
 
     var mergedPoly = mergingAlgorithm(LPCP, LLE).filter(function (poly) {
       return !isFlat(poly);
-    });
+    }); // Merging the inessentials true diagonals
 
-    // Merging the inessentials true diagonals
     trueDiagonals.forEach(function (_ref) {
       var i2 = _ref.a,
           j2 = _ref.b;
-
-      var Pj = void 0,
-          Pu = void 0,
-          i1 = void 0,
-          i3 = void 0,
-          j1 = void 0,
-          j3 = void 0;
+      var Pj, Pu, i1, i3, j1, j3;
 
       for (var i = 0; i < mergedPoly.length; i++) {
         var poly = mergedPoly[i];
@@ -2189,34 +2393,37 @@ return d[d.length-1];};return ", funcName].join("");
         var _loop2 = function _loop2(j) {
           var _edges$j = edges[j],
               edgeA = _edges$j.a,
-              edgeB = _edges$j.b;
-          // TODO : ici je pense qu'on peut passer previous/nextVertex, a verifier
+              edgeB = _edges$j.b; // TODO : ici je pense qu'on peut passer previous/nextVertex, a verifier
 
-          if ((i2.originalId || i2.id) === (edgeA.originalId || edgeA.id) && (j2.originalId || j2.id) === (edgeB.originalId || edgeB.id)) {
+          if (vertexEqualityAfterAbsorption(i2, edgeA) && vertexEqualityAfterAbsorption(j2, edgeB)) {
             i1 = poly[(poly.findIndex(function (v) {
-              return (v.originalId || v.id) === (edgeA.originalId || edgeA.id);
+              return vertexEqualityAfterAbsorption(v, edgeA);
             }) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
+
             j3 = poly[(poly.findIndex(function (v) {
-              return (v.originalId || v.id) === (edgeB.originalId || edgeB.id);
+              return vertexEqualityAfterAbsorption(v, edgeB);
             }) + 1) % polyLength]; // nextVertex(edgeB, poly);
+
             Pu = poly;
-            return 'break';
-          } else if ((i2.originalId || i2.id) === (edgeB.originalId || edgeB.id) && (j2.originalId || j2.id) === (edgeA.originalId || edgeA.id)) {
+            return "break";
+          } else if (vertexEqualityAfterAbsorption(i2, edgeB) && vertexEqualityAfterAbsorption(j2, edgeA)) {
             i3 = poly[(poly.findIndex(function (v) {
-              return (v.originalId || v.id) === (edgeB.originalId || edgeB.id);
+              return vertexEqualityAfterAbsorption(v, edgeB);
             }) + 1) % polyLength]; // nextVertex(edgeB, poly);
+
             j1 = poly[(poly.findIndex(function (v) {
-              return (v.originalId || v.id) === (edgeA.originalId || edgeA.id);
+              return vertexEqualityAfterAbsorption(v, edgeA);
             }) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
+
             Pj = poly;
-            return 'break';
+            return "break";
           }
         };
 
         for (var j = 0; j < edges.length; j++) {
           var _ret2 = _loop2(j);
 
-          if (_ret2 === 'break') break;
+          if (_ret2 === "break") break;
         }
 
         if (Pu && Pj) {
@@ -2225,30 +2432,33 @@ return d[d.length-1];};return ", funcName].join("");
               return poly !== Pu && poly !== Pj;
             }).concat([mergePolygons(Pj, Pu)]);
           }
+
           break;
         }
       }
     });
-
     return mergedPoly.map(function (poly) {
       return poly.map(function (_ref2) {
         var x = _ref2.x,
             y = _ref2.y;
-        return { x: x, y: y };
+        return {
+          x: x,
+          y: y
+        };
       });
     });
   }
 
-  exports.absHol = absHol;
   exports.MP5 = MP5;
+  exports.absHol = absHol;
+  exports.decompose = absHol;
+  exports.getRobustness = getRobustness;
+  exports.isClockwiseOrdered = isClockwiseOrdered;
+  exports.isConvex = isConvex;
   exports.isSimple = isSimple;
   exports.orderClockwise = orderClockwise;
-  exports.isConvex = isConvex;
-  exports.isClockwiseOrdered = isClockwiseOrdered;
   exports.setRobustness = setRobustness;
-  exports.getRobustness = getRobustness;
-  exports.default = absHol;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
