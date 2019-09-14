@@ -78,13 +78,13 @@ export function MP5Procedure (polygon, startingVertex = polygon[0]) {
  */
 export function MP5 (polygon) {
   if (!Array.isArray(polygon)) {
-    throw new Error(`MP5 can only take an array of points {x, y} as input`);
+    throw new Error('MP5 can only take an array of points {x, y} as input');
   }
   if (polygon.length <= 2) {
     return [polygon];
   }
   if (!isClockwiseOrdered(polygon)) {
-    throw new Error(`MP5 can only work with clockwise ordered polygon`);
+    throw new Error('MP5 can only work with clockwise ordered polygon');
   }
 
   // L is containing the convex polygons.

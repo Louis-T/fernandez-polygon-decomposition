@@ -1,4 +1,4 @@
-import { pointEquality, orientation, isConvex } from './utils.js';
+import { vertexEqualityAfterAbsorption, orientation, isConvex } from './utils.js';
 
 function rotateRight (arr, n) {
   const length = arr.length;
@@ -14,11 +14,12 @@ function rotateRight (arr, n) {
  * @returns {{ x: number, y: number, id: number }[]}
  */
 export function mergePolygons (polygon1, polygon2) {
-  const sharedVertices = polygon1.map((v1, index) => [index, polygon2.findIndex(v2 => pointEquality(v1, v2))]).filter(([_, v2Index]) => v2Index > -1);
+  // const sharedVertices = polygon1.map((v1, index) => [index, polygon2.findIndex(v2 => pointEquality(v1, v2))]).filter(([_, v2Index]) => v2Index > -1); // can be problematic when a point corresponds to several vertices
+  const sharedVertices = polygon1.map((v1, index) => [index, polygon2.findIndex(v2 => vertexEqualityAfterAbsorption(v1, v2))]).filter(([_, v2Index]) => v2Index > -1);
   const polygon1Length = polygon1.length;
 
   if (sharedVertices.length !== 2) {
-    throw new Error('sharedVertices length should be 2 : ' + JSON.stringify(sharedVertices));
+    throw new Error(`sharedVertices length should be 2 : ${JSON.stringify(sharedVertices)}`);
   }
 
   if ((sharedVertices[0][0] + 1) % polygon1Length === sharedVertices[1][0]) {
@@ -67,10 +68,10 @@ export function mergingAlgorithm (polygons, LLE) {
     const PuLength = Pu.length;
 
     // custom nextVertex & previousVertex to take into account the originalId (for absHol)
-    const i1 = Pu[(Pu.findIndex(v => (v.originalId || v.id) === (i2.originalId || i2.id)) + PuLength - 1) % PuLength]; // previousVertex(i2, Pu);
-    const i3 = Pj[(Pj.findIndex(v => (v.originalId || v.id) === (i2.originalId || i2.id)) + 1) % PjLength]; // nextVertex(i2, Pj);
-    const j1 = Pj[(Pj.findIndex(v => (v.originalId || v.id) === (j2.originalId || j2.id)) + PjLength - 1) % PjLength]; // previousVertex(j2, Pj)
-    const j3 = Pu[(Pu.findIndex(v => (v.originalId || v.id) === (j2.originalId || j2.id)) + 1) % PuLength]; //  nextVertex(j2, Pu);
+    const i1 = Pu[(Pu.findIndex(v => vertexEqualityAfterAbsorption(v, i2)) + PuLength - 1) % PuLength]; // previousVertex(i2, Pu);
+    const i3 = Pj[(Pj.findIndex(v => vertexEqualityAfterAbsorption(v, i2)) + 1) % PjLength]; // nextVertex(i2, Pj);
+    const j1 = Pj[(Pj.findIndex(v => vertexEqualityAfterAbsorption(v, j2)) + PjLength - 1) % PjLength]; // previousVertex(j2, Pj)
+    const j3 = Pu[(Pu.findIndex(v => vertexEqualityAfterAbsorption(v, j2)) + 1) % PuLength]; //  nextVertex(j2, Pu);
 
     if (orientation(i1, i2, i3) >= 0 && orientation(j1, j2, j3) >= 0) {
       const P = mergePolygons(Pj, Pu);
@@ -82,7 +83,7 @@ export function mergingAlgorithm (polygons, LLE) {
       LDP.set(P, true);
 
       LUP.set(P, P);
-      for (let poly of LUP.keys()) {
+      for (const poly of LUP.keys()) {
         if (LUP.get(poly) === Pj || LUP.get(poly) === Pu) {
           LUP.set(poly, P);
         }

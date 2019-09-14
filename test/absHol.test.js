@@ -411,6 +411,45 @@ describe.each([[false], [true]])('Robust: %s', (robustness) => {
             expect(partition).toBeAConvexPartition();
         });
 
+        test('Polygon with holes n°13 (pointEquality will fail in mergePolygons => must use the new vertexEqualityAfterAbsorption)', () => {
+            const contour = [
+                { x: 139.20000000000002, y: 325.6 },
+                { x: 278.40000000000003, y: 244.2 },
+                {  x: 417.59999999999997, y: 162.8 },
+                { x: 556.8000000000001, y: 81.4 },
+                { x: 835.1999999999999, y: 81.4 },
+                { x: 974.4, y: 162.8 },
+                { x: 1113.6000000000001, y: 244.2 },
+                { x: 1252.8, y: 325.6 },
+                { x: 1252.8, y: 488.4 },
+                { x: 1113.6000000000001, y: 569.8 },
+                { x: 974.4, y: 651.2 },
+                { x: 835.1999999999999, y: 732.6 },
+                { x: 556.8000000000001, y: 732.6 },
+                { x: 417.59999999999997, y: 651.2 },
+                { x: 278.40000000000003, y: 569.8 },
+                { x: 139.20000000000002, y: 488.4 }
+            ];
+
+            const holes = [
+                [
+                    { x: 417.59999999999997, y: 244.2 },
+                    { x: 556.8000000000001, y: 244.2 },
+                    { x: 696, y: 407 },
+                    { x: 417.59999999999997, y: 325.6 }
+                ],
+                [
+                    { x: 696, y: 407 },
+                    { x: 974.4,y: 488.4 },
+                    { x: 974.4, y: 569.8 },
+                    { x: 835.1999999999999, y: 569.8 }
+                ]
+            ];
+
+            const partition = absHol(contour, holes);
+            expect(partition).toBeAConvexPartition();
+        });
+
         let n = 0;
         for (let i = 0; i <= 150; i += 75) {
             for (let j = 0; j <= 150; j += 75) {

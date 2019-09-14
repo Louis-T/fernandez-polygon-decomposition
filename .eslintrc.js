@@ -1,7 +1,7 @@
 module.exports = {
     "extends": "standard",
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 9,
     },
     "rules": {
         "semi": [2, "always"],

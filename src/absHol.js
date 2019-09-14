@@ -1,4 +1,4 @@
-import { getEdges, containsPolygon, containsEntirePolygon, isClockwiseOrdered, vertexEquality, orientation, substractPolygons, inConvexPolygon, squaredDistance, lineIntersection, isFlat } from './utils.js';
+import { getEdges, containsPolygon, containsEntirePolygon, isClockwiseOrdered, vertexEquality, vertexEqualityAfterAbsorption, orientation, substractPolygons, inConvexPolygon, squaredDistance, lineIntersection, isFlat } from './utils.js';
 import { MP5Procedure } from './mp5.js';
 import { mergingAlgorithm, mergePolygons } from './merge.js';
 import { preprocessPolygon } from './common.js';
@@ -163,8 +163,7 @@ function absHolProcedure (P, holes, idOffset) {
       getEdges(C).forEach((edge) => {
         for (let i = 0; i < LLE.length; i++) {
           const { i2: diagonalA, j2: diagonalB } = LLE[i];
-          if ((diagonalA.originalId || diagonalA.id) === (edge.b.originalId || edge.b.id) &&
-                       (diagonalB.originalId || diagonalB.id) === (edge.a.originalId || edge.a.id)) {
+          if (vertexEqualityAfterAbsorption(diagonalA, edge.b) && vertexEqualityAfterAbsorption(diagonalB, edge.a)) {
             LLE[i].leftPolygon = C;
             break;
           }
@@ -198,15 +197,15 @@ function absHolProcedure (P, holes, idOffset) {
  */
 export function absHol (polygon, holes = []) {
   if (!Array.isArray(polygon)) {
-    throw new Error(`absHol can only take an array of points {x, y} as input`);
+    throw new Error('absHol can only take an array of points {x, y} as input');
   }
   if (polygon.length <= 2) {
     return [polygon];
   }
   if (!isClockwiseOrdered(polygon)) {
-    throw new Error(`absHol can only work with clockwise ordered vertices`);
+    throw new Error('absHol can only work with clockwise ordered vertices');
   }
-  // en mode dev : vérifier que les holes sont bien tous dans polygon
+  // Assert every holes are in the polygon. TODO : disable in prod ??
   if (!holes.every(hole => containsEntirePolygon(polygon, hole))) {
     throw new Error('One or more holes are not totally inside the polygon !');
   }
@@ -237,16 +236,14 @@ export function absHol (polygon, holes = []) {
       for (let j = 0; j < edges.length; j++) {
         const { a: edgeA, b: edgeB } = edges[j];
         // TODO : ici je pense qu'on peut passer previous/nextVertex, a verifier
-        if ((i2.originalId || i2.id) === (edgeA.originalId || edgeA.id) &&
-            (j2.originalId || j2.id) === (edgeB.originalId || edgeB.id)) {
-          i1 = poly[(poly.findIndex(v => (v.originalId || v.id) === (edgeA.originalId || edgeA.id)) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
-          j3 = poly[(poly.findIndex(v => (v.originalId || v.id) === (edgeB.originalId || edgeB.id)) + 1) % polyLength]; // nextVertex(edgeB, poly);
+        if (vertexEqualityAfterAbsorption(i2, edgeA) && vertexEqualityAfterAbsorption(j2, edgeB)) {
+          i1 = poly[(poly.findIndex(v => vertexEqualityAfterAbsorption(v, edgeA)) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
+          j3 = poly[(poly.findIndex(v => vertexEqualityAfterAbsorption(v, edgeB)) + 1) % polyLength]; // nextVertex(edgeB, poly);
           Pu = poly;
           break;
-        } else if ((i2.originalId || i2.id) === (edgeB.originalId || edgeB.id) &&
-                   (j2.originalId || j2.id) === (edgeA.originalId || edgeA.id)) {
-          i3 = poly[(poly.findIndex(v => (v.originalId || v.id) === (edgeB.originalId || edgeB.id)) + 1) % polyLength]; // nextVertex(edgeB, poly);
-          j1 = poly[(poly.findIndex(v => (v.originalId || v.id) === (edgeA.originalId || edgeA.id)) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
+        } else if (vertexEqualityAfterAbsorption(i2, edgeB) && vertexEqualityAfterAbsorption(j2, edgeA)) {
+          i3 = poly[(poly.findIndex(v => vertexEqualityAfterAbsorption(v, edgeB)) + 1) % polyLength]; // nextVertex(edgeB, poly);
+          j1 = poly[(poly.findIndex(v => vertexEqualityAfterAbsorption(v, edgeA)) + polyLength - 1) % polyLength]; // previousVertex(edgeA, poly);
           Pj = poly;
           break;
         }

@@ -30,6 +30,21 @@ export function vertexEquality (vertex1, vertex2) {
 }
 
 /**
+ * Compares two vertices. Both of the vertex must be defined by an unique id and optionnally by an originalId.
+ * This method is used to compare vertices after the absoption phase of the absHol procedure.
+ *
+ * @param {{ x: number, y: number, id: number, originalId: number }} vertex1
+ * @param {{ x: number, y: number, id: number, originalId: number }} vertex2
+ * @returns {boolean}
+ */
+export function vertexEqualityAfterAbsorption (vertex1, vertex2) {
+  if (vertex1.id === undefined || vertex2.id === undefined) {
+    throw new Error('A vertex must be defined by an unique id.');
+  }
+  return (vertex1.originalId || vertex1.id) === (vertex2.originalId || vertex2.id);
+}
+
+/**
  * @param {{ x: number, y: number }} point1
  * @param {{ x: number, y: number }} point2
  * @returns {boolean}

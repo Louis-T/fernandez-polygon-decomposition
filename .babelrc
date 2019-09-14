@@ -1,17 +1,23 @@
 {
   "presets": [
-    ["env", {
-      "useBuiltIns": false,
-      "modules": false
-    }]
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": 3
+      }
+    ]
   ],
-  "plugins": ["transform-object-rest-spread"],
+  "plugins": ["@babel/plugin-proposal-object-rest-spread"],
   "env": {
     "test": {
       "presets": [
-        ["env", {
-          "useBuiltIns": false
-        }]
+        [
+          "@babel/preset-env",
+          {
+            "useBuiltIns": false
+          }
+        ]
       ]
     }
   }

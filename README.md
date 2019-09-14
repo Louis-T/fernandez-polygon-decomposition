@@ -27,9 +27,9 @@ yarn add fernandez-polygon-decomposition
 The main function of this library is used to decompose a [simple polygon](#issimple) into a partition of convex polygons :
 
 ```javascript
-const decompose = require('fernandez-polygon-decomposition').default;
+const { decompose } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
-import decompose from 'fernandez-polygon-decomposition';
+import { decompose } from 'fernandez-polygon-decomposition';
 
 const polygon = [
   { x: 0, y: 0 },
@@ -58,8 +58,7 @@ console.log(convexPartition);
 :bulb: But the library exports (along with other methods, see [this section](#other-methods)) some useful functions if you want to change the vertices order of your polygon :
 
 ```javascript
-const isClockwiseOrdered = require('fernandez-polygon-decomposition').isClockwiseOrdered;
-const orderClockwise = require('fernandez-polygon-decomposition').orderClockwise;
+const { isClockwiseOrdered, orderClockwise } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { isClockwiseOrdered, orderClockwise } from 'fernandez-polygon-decomposition';
 
@@ -106,7 +105,7 @@ Check [here](#setrobustness---getrobustness) for more details about this method.
 
 Checks if the polygon is simple (see https://en.wikipedia.org/wiki/Simple_polygon).
 ```javascript
-const isSimple = require('fernandez-polygon-decomposition').isSimple;
+const { isSimple } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { isSimple } from 'fernandez-polygon-decomposition';
 
@@ -126,7 +125,7 @@ console.log(isSimple(polygon));
 Indicates if the polygon vertices are in clockwise order (relative to the inverted y-axis of the web, ie : counterclockwise in normal mathematics).
 
 ```javascript
-const isClockwiseOrdered = require('fernandez-polygon-decomposition').isClockwiseOrdered;
+const { isClockwiseOrdered } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { isClockwiseOrdered } from 'fernandez-polygon-decomposition';
 
@@ -146,7 +145,7 @@ console.log(isClockwiseOrdered(badPolygon));
 Checks if the vertices of the polygon are in clockwise order, and if they are not, it reverses the order of those vertices.
 
 ```javascript
-const orderClockwise = require('fernandez-polygon-decomposition').orderClockwise;
+const { orderClockwise } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { orderClockwise } from 'fernandez-polygon-decomposition';
 
@@ -172,7 +171,7 @@ console.log(goodPolygon);
 Indicates if the polygon is convex.
 
 ```javascript
-const isConvex = require('fernandez-polygon-decomposition').isConvex;
+const { isConvex } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { isConvex } from 'fernandez-polygon-decomposition';
 
@@ -207,8 +206,7 @@ But if you work with integers, or controlled inputs (few decimal places), it is 
 The use of these predicates can be configured (globally, for all methods) by the method `setRobustness`, and the current robustness state of the library can be accessed by the method `getRobustness`.
 
 ```javascript
-const getRobustness = require('fernandez-polygon-decomposition').getRobustness;
-const setRobustness = require('fernandez-polygon-decomposition').setRobustness;
+const { getRobustness, setRobustness } = require('fernandez-polygon-decomposition');
 // or (if you can use ES2015's import syntax)
 import { getRobustness, setRobustness } from 'fernandez-polygon-decomposition';
 
